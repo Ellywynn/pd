@@ -1,73 +1,61 @@
-CREATE TABLE user(
-    id INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS user (
+    user_id INT NOT NULL AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    avatar VARCHAR(100) NOT NULL,
-    nickname VARCHAR(20) NOT NULL,
+    avatar_path VARCHAR(100) NOT NULL DEFAULT 'default.png',
+    nickname VARCHAR(40) NOT NULL,
+    registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY(id)
-);
+    PRIMARY KEY(user_id)
+) ENGINE=INNODB;
 
-CREATE TABLE post(
-    id INT NOT NULL AUTO_INCREMENT,
-    title VARCHAR(150) NOT NULL
+CREATE TABLE IF NOT EXISTS post (
+    post_id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(150) NOT NULL,
     user_id INT NOT NULL,
-    content TEXT NOT NULL -- post content
-    last_update TIMESTAMP NOT NULL,
+    content TEXT NOT NULL, -- post content (stored like innerHTML)
+    last_update DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY(id),
+    PRIMARY KEY(post_id),
 
-    CONSTRAINT fk_user_id
     FOREIGN KEY(user_id)
-    REFERENCES user(id) 
-    ON UPDATE CASCADE ON DELETE CASCADE
-);
+    REFERENCES user(user_id)
+) ENGINE=INNODB;
 
-CREATE TABLE comment(
-    id INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS comment (
+    comment_id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     post_id INT NOT NULL,
     content VARCHAR(2000) NOT NULL,
     last_update TIMESTAMP NOT NULL,
 
-    PRIMARY KEY(id),
-    CONSTRAINT fk_user_id
+    PRIMARY KEY(comment_id),
+
     FOREIGN KEY(user_id)
-    REFERENCES user(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
+    REFERENCES user(user_id),
 
-    CONSTRAINT fk_post_id
     FOREIGN KEY(post_id)
-    REFERENCES post(id)
-    ON UPDATE CASCADE ON DELETE CASCADE
-);
+    REFERENCES post(post_id)
+) ENGINE=INNODB;
 
-CREATE TABLE post_like(
-    user_id INT,
-    post_id INT,
-
-    CONSTRAINT fk_user_id
-    FOREIGN KEY(user_id)
-    REFERENCES user(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-
-    CONSTRAINT fk_post_id
-    FOREIGN KEY(post_id)
-    REFERENCES post(id) 
-    ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-CREATE TABLE comment_like(
+CREATE TABLE IF NOT EXISTS post_like (
     user_id INT NOT NULL,
-    comment_id INT NOT NULL,
+    post_id INT NOT NULL,
 
-    CONSTRAINT fk_user_id
     FOREIGN KEY(user_id)
-    REFERENCES user(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
+    REFERENCES user(user_id),
 
-    CONSTRAINT fk_comment_id
+    FOREIGN KEY(post_id)
+    REFERENCES post(post_id)
+) ENGINE=INNODB;
+
+CREATE TABLE IF NOT EXISTS comment_like (
+    user_id INT,
+    comment_id INT,
+
+    FOREIGN KEY(user_id)
+    REFERENCES user(user_id),
+
     FOREIGN KEY(comment_id)
-    REFERENCES comment(id) 
-    ON UPDATE CASCADE ON DELETE CASCADE
-);
+    REFERENCES comment(comment_id)
+) ENGINE=INNODB;

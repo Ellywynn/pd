@@ -2,11 +2,13 @@ const db = require('../config/database');
 
 class Post {
     async createPost(req, res) {
-        const {name, surname, class_id, email, tel, date_of_birth} = req.body;
-        const q = 'INSERT INTO student (name, surname, class_id, email, tel, date_of_birth)'
-        + 'values($1, $2, $3, $4, $5, $6) RETURNING *';
-        const newStudent = await db.query(q, [name, surname, class_id, email, tel, date_of_birth]);
-        res.json(newStudent.rows[0]);
+        const {title, user_id, content} = req.body;
+        // TODO: data validation
+        const q = 'INSERT INTO post (title, user_id, content)'
+        + `values(${title}, ${user_id}, ${content}) RETURNING *`;
+        const newStudent = await db.query(q);
+        console.log(newStudent);
+        res.status(201).json(newStudent.rows[0]);
     }
     async getAllPosts(req, res) {
         const q = 'SELECT * FROM student;';

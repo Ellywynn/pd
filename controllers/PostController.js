@@ -13,7 +13,7 @@ class Post {
             res.status(201).json(newStudent.rows[0]);
         } catch (error) {
 
-        }
+        }  
     }
     async getAllPosts(req, res) {
         const q = 'SELECT * FROM student';

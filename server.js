@@ -7,6 +7,7 @@ const errorHandler = require('./middleware/ErrorHandler');
 const handlebars = require('express-handlebars');
 
 // роутеры
+const indexRouter = require('./routes/indexRouter');
 const postRouter = require('./routes/postRouter');
 
 // порт сервера
@@ -23,6 +24,7 @@ app.use(cors());
 app.use(express.static(path.resolve(__dirname, 'public')));
 
 // api
+app.use('/', indexRouter);
 app.use('/post', postRouter);
 
 // middleware обработки ошибок

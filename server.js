@@ -1,14 +1,13 @@
-// инициализация переменных в .env файле
-require('dotenv').config();
-
-// connect routes
-// const studentRouter = require('./routes/studentRouter');
-// const teacherRouter = require('./routes/teacherRouter');
-
+// подключение необходимых библиотек
 const express = require('express');
-const path = require('path');
 const db = require('./config/database');
+const cors = require('cors');
+const path = require('path');
 const errorHandler = require('./middleware/ErrorHandler');
+const handlebars = require('express-handlebars');
+
+// роутеры
+const postRouter = require('./routes/postRouter');
 
 // порт сервера
 const PORT = process.env.PORT || 80;
@@ -18,15 +17,20 @@ const app = express();
 
 // позволяет приложению использовать json формат данных
 app.use(express.json());
+app.use(cors());
+
 // инициализация статического каталога
 app.use(express.static(path.resolve(__dirname, 'public')));
 
-// application api implemented with routes
-// app.use('/api', studentRouter);
-// app.use('/api', teacherRouter);
+// api
+app.use('/post', postRouter);
 
 // middleware обработки ошибок
 app.use(errorHandler);
+
+// шаблонный 
+app.engine('handlebars', handlebars({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
 
 // запуск приложения
 start();

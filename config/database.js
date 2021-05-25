@@ -1,3 +1,5 @@
+// инициализация переменных в .env файле
+require('dotenv').config();
 const mysql = require("mysql2");
 
 // асинхронное подключение к базе данных

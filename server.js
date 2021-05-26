@@ -4,7 +4,6 @@ const db = require('./config/database');
 const cors = require('cors');
 const path = require('path');
 const errorHandler = require('./middleware/ErrorHandler');
-const handlebars = require('express-handlebars');
 
 // роутеры
 const indexRouter = require('./routes/indexRouter');
@@ -30,11 +29,15 @@ app.use('/post', postRouter);
 // middleware обработки ошибок
 app.use(errorHandler);
 
-// шаблонный 
-app.engine('handlebars', handlebars({ defaultLayout: 'main' }));
-app.set('view engine', 'handlebars');
+// template engine
+app.set('view engine', 'ejs');
 
-// запуск приложения
+
+
+
+/*
+    запуск приложения
+*/
 start();
 
 // функция подключается к базе данных и запускает сервер

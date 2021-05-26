@@ -15,6 +15,9 @@ class Post {
 
         }  
     }
+    async createPostPage(req, res) {
+        res.render('edit_post');
+    }
     async getAllPosts(req, res) {
         const q = 'SELECT * FROM student';
         const data = await db.query(q);

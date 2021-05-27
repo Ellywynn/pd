@@ -6,8 +6,8 @@ const path = require('path');
 const errorHandler = require('./middleware/ErrorHandler');
 
 // роутеры
-const indexRouter = require('./routes/indexRouter');
-const postRouter = require('./routes/postRouter');
+const indexRouter = require('./routes');
+const postRouter = require('./routes/post');
 
 // порт сервера
 const PORT = process.env.PORT || 80;

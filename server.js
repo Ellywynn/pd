@@ -1,13 +1,16 @@
 // подключение необходимых библиотек
 const express = require('express');
-const db = require('./config/database');
-const cors = require('cors');
 const path = require('path');
+const cors = require('cors');
+const fileUpload = require('express-fileupload');
+
+const db = require('./config/database');
 const errorHandler = require('./middleware/ErrorHandler');
 
 // роутеры
-const indexRouter = require('./routes');
+const indexRouter = require('./routes/index');
 const postRouter = require('./routes/post');
+const authRouter = require('./routes/auth');
 
 // порт сервера
 const PORT = process.env.PORT || 80;
@@ -18,6 +21,7 @@ const app = express();
 // позволяет приложению использовать json формат данных
 app.use(express.json());
 app.use(cors());
+app.use(fileUpload());
 
 // инициализация статического каталога
 app.use(express.static(path.resolve(__dirname, 'public')));
@@ -25,6 +29,7 @@ app.use(express.static(path.resolve(__dirname, 'public')));
 // api
 app.use('/', indexRouter);
 app.use('/post', postRouter);
+app.use('/auth', authRouter);
 
 // middleware обработки ошибок
 app.use(errorHandler);

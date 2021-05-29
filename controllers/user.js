@@ -1,7 +1,6 @@
 const db = require('../config/database');
 const path = require('path');
 const bcrypt = require('bcrypt');
-const ApiError = require('../errors/ApiError');
 
 // round count for generating salt
 const roundCount = 11;
@@ -14,7 +13,7 @@ class User {
             let {email, password, nickname} = req.body;
 
             if(!email || !password || !nickname) {
-                next(ApiError.badRequest('Неправильно заданы данные пользователя'));
+                throw new Error('Неправильно заданы данные пользователя');
             }
 
             email = email.toLowerCase();
@@ -74,14 +73,17 @@ class User {
         try {
             errors = [];
             const {email, password} = req.body;
-            const result = await db.query(`SELECT password, user_id FROM user WHERE email = '${email}' LIMIT 1`);
+            const q = `SELECT u.user_id AS user_id, u.password AS password, r.role AS role FROM user AS u`
+                + ` INNER JOIN role AS r ON u.role = r.role_id WHERE u.email = '${email}'`;
+            const result = await db.query(q);
 
             // пользователь существует
             if(result[0].length > 0) {
                 const same = await bcrypt.compare(password, result[0][0].password);
                 if(same) {
                     // верный пароль
-                    req.session.userId = result[0][0].user_id; 
+                    req.session.userId = result[0][0].user_id;
+                    req.session.role = result[0][0].role;
                     res
                       .status(201)
                       .redirect('/');
@@ -96,6 +98,16 @@ class User {
                 await bcrypt.compare(password, fakePass);
                 invalidLogin(res, email, password);
             }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    logout(req, res, next) {
+        try {
+            req.session.destroy(() => {
+                res.redirect('/');
+            });
         } catch (error) {
             console.error(error);
         }

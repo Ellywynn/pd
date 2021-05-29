@@ -6,7 +6,6 @@ const fileUpload = require('express-fileupload');
 const expressSession = require('express-session');
 
 const db = require('./config/database');
-const errorHandler = require('./middleware/ErrorHandler');
 
 // роутеры
 const indexRouter = require('./routes/index');
@@ -22,22 +21,27 @@ const app = express();
 // позволяет приложению использовать json формат данных
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(expressSession({ resave: true, secret: process.env.SESSION_KEY, saveUninitialized: true }));
 app.use(cors());
 app.use(fileUpload());
-app.use(expressSession({
-    secret: process.env.SESSION_KEY
-}));
 
 // инициализация статического каталога
 app.use(express.static(path.resolve(__dirname, 'public')));
+
+// глобальная переменная для определения входа юзера и его роли
+global.loggedIn = global.role = null;
+app.use("*", (req, res, next) => {
+    loggedIn = req.session.userId;
+    role = req.session.role;
+    next();
+});
 
 // api
 app.use('/', indexRouter);
 app.use('/post', postRouter);
 app.use('/auth', authRouter);
-
-// middleware обработки ошибок
-app.use(errorHandler);
+// 404 error
+app.use((req, res) => res.render('notfound', { title: 'Invalid Link' }));
 
 // template engine
 app.set('view engine', 'ejs');

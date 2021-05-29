@@ -1,5 +1,4 @@
 const db = require('../config/database');
-const ApiError = require('../errors/ApiError');
 
 class Post {
     async createPost(req, res) {

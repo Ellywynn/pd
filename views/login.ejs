@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('layouts/head'); -%>
+
+<body>
+  <%- include('layouts/navbar'); -%>
+  
+  <div class="container">
+    <h1>Login</h1>
+
+    <% for(let i = 0; i < errors.length; i++) { %>
+      <h2><%= errors[i] %></h2>
+    <% } %>
+
+    <form action="/auth/login" method="post">
+        <label for="login">Email:</label>
+        <input type="text" name="email" id="email" required value=<%= email %>>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="pass1" required value=<%= password %>> 
+
+        <br> <br>
+
+        <button type="submit">Log In</button>
+    </form>
+  </div>
+
+  <%- include('layouts/footer'); -%>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('layouts/head'); -%>
+
+<body>
+  <%- include('layouts/navbar'); -%>
+  
+  <div class="container">
+    <h1>Registration</h1>
+
+    <% for(let i = 0; i < errors.length; i++) { %>
+      <h2><%= errors[i] %></h2>
+    <% } %>
+
+    <form action="/auth/register" method="post">
+        <label for="nickname">Username:<span class="required-field">*</span></label>
+        <input type="text" name="nickname" id="username" required value=<%= nickname %>>
+        <label for="email">Email:<span class="required-field">*</span></label>
+        <input type="email" name="email" id="email" required value=<%= email %>> 
+        <label for="password">Password:<span class="required-field">*</span></label>
+        <input type="password" name="password" id="pass1" required value=<%= password %>> 
+        <label>Repeat password:<span class="required-field">*</span></label>
+        <input type="password" id="pass2" required value=<%= password %>>
+
+        <br>
+
+        <p class="required-field">* - required</p>
+
+        <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <%- include('layouts/footer'); -%>
+  <%- include('scripts/register'); -%>
+</body>
+</html>

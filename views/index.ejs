@@ -7,7 +7,12 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
-    <h1><%= title %></h1>
+      <h1><%= title %></h1>
+      <% if(loggedIn && role) { %>
+        <h2>You are logged in!</h2>
+      <% } else { %>
+        <h2>Not authorized</h2>
+      <% } %>
   </div>
 
   <%- include('layouts/footer'); -%>

@@ -20,6 +20,7 @@ const app = express();
 
 // позволяет приложению использовать json формат данных
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(fileUpload());
 

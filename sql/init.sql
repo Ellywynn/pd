@@ -1,15 +1,26 @@
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE IF NOT EXISTS `role` (
+    role_id INT NOT NULL AUTO_INCREMENT,
+    role VARCHAR(20) NOT NULL,
+
+    PRIMARY KEY(role_id)
+) ENGINE=INNODB;
+
+CREATE TABLE IF NOT EXISTS `user` (
     user_id INT NOT NULL AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     avatar_path VARCHAR(100) NOT NULL DEFAULT 'default.png',
     nickname VARCHAR(40) NOT NULL,
+    role INT NOT NULL DEFAULT 3,
     registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY(user_id)
+    PRIMARY KEY(user_id),
+
+    FOREIGN KEY(role)
+    REFERENCES role(role_id)
 ) ENGINE=INNODB;
 
-CREATE TABLE IF NOT EXISTS post (
+CREATE TABLE IF NOT EXISTS `post` (
     post_id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(150) NOT NULL,
     user_id INT NOT NULL,
@@ -22,7 +33,7 @@ CREATE TABLE IF NOT EXISTS post (
     REFERENCES user(user_id)
 ) ENGINE=INNODB;
 
-CREATE TABLE IF NOT EXISTS comment (
+CREATE TABLE IF NOT EXISTS `comment` (
     comment_id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     post_id INT NOT NULL,
@@ -38,7 +49,7 @@ CREATE TABLE IF NOT EXISTS comment (
     REFERENCES post(post_id)
 ) ENGINE=INNODB;
 
-CREATE TABLE IF NOT EXISTS post_like (
+CREATE TABLE IF NOT EXISTS `post_like` (
     user_id INT NOT NULL,
     post_id INT NOT NULL,
 
@@ -49,7 +60,7 @@ CREATE TABLE IF NOT EXISTS post_like (
     REFERENCES post(post_id)
 ) ENGINE=INNODB;
 
-CREATE TABLE IF NOT EXISTS comment_like (
+CREATE TABLE IF NOT EXISTS `comment_like` (
     user_id INT,
     comment_id INT,
 
@@ -59,3 +70,10 @@ CREATE TABLE IF NOT EXISTS comment_like (
     FOREIGN KEY(comment_id)
     REFERENCES comment(comment_id)
 ) ENGINE=INNODB;
+
+INSERT INTO role (role) VALUES('owner');
+INSERT INTO role (role) VALUES('admin');
+INSERT INTO role (role) VALUES('default');
+INSERT INTO role (role) VALUES('moderator');
+
+INSERT INTO user (email, password, nickname, role) VALUES('helloworld@gmail.com', 'asdf123', 'ellywynn', 1);

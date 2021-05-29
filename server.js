@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+const expressSession = require('express-session');
 
 const db = require('./config/database');
 const errorHandler = require('./middleware/ErrorHandler');
@@ -23,6 +24,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(fileUpload());
+app.use(expressSession({
+    secret: process.env.SESSION_KEY
+}));
 
 // инициализация статического каталога
 app.use(express.static(path.resolve(__dirname, 'public')));

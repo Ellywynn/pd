@@ -7,9 +7,22 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
-      <h2>dddddddd</h2>
+    <form method="post" action="/post/add">
+      <input type="text" name="title"
+        placeholder="Заголовок..."
+        value=<% if(locals.postTitle) { %>
+          <%= postTitle %>
+        <% } %>> <br> <br>
+      <textarea id="summernote" name="editordata">
+        <% if(locals.postContent) { %>
+          <%- postContent %>
+        <% } %>
+      </textarea>
+      <button type="submit">Сохранить</button>
+    </form>
   </div>
 
   <%- include('layouts/footer'); -%>
+  <script src="/js/editPost.js"></script>
 </body>
 </html>

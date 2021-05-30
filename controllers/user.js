@@ -112,6 +112,29 @@ class User {
             console.error(error);
         }
     }
+
+    async getUser(req, res) {
+        try {
+            const nickname = req.params.nickname;
+            if(!nickname) {
+                console.log('no nickname');
+                return res.status(404).render('notfound');
+            }
+            const result = await db.query(`SELECT nickname, user_id AS id FROM user WHERE nickname='${nickname}'`);
+
+            // если пользователь с таким ником найден
+            if(result[0].length > 0) {
+                console.log(result[0][0]);
+                // TODO: user page
+            } else {
+                return res.status(404).render('notfound', {
+                    message: `Cannot find user ${req.params.nickname}`
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 function invalidLogin(res, email, password) {

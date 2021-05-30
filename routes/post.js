@@ -7,8 +7,9 @@ const authMiddleware = require('../middleware/auth');
 router.get('/', postController.getAllPosts);
 // router.get('/:id', postController.getOnePost);
 router.get('/add', authMiddleware.isLoggedIn, postController.createPostPage);
+router.get('/edit/:post_id', authMiddleware.isLoggedIn, postController.editPostPage);
 router.post('/add', authMiddleware.isLoggedIn, postController.createPost);
-router.put('/', authMiddleware.isLoggedIn, postController.updatePost);
+router.put('/edit', authMiddleware.isLoggedIn, postController.editPost);
 router.delete('/:id', authMiddleware.isLoggedIn, postController.deletePost);
 
 module.exports = router;

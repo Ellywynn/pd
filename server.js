@@ -11,6 +11,7 @@ const db = require('./config/database');
 const indexRouter = require('./routes/index');
 const postRouter = require('./routes/post');
 const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
 
 // порт сервера
 const PORT = process.env.PORT || 80;
@@ -40,6 +41,7 @@ app.use("*", (req, res, next) => {
 app.use('/', indexRouter);
 app.use('/post', postRouter);
 app.use('/auth', authRouter);
+app.use('/user', userRouter);
 // 404 error
 app.use((req, res) => res.render('notfound', { title: 'Invalid Link' }));
 

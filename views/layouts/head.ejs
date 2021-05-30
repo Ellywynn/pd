@@ -5,7 +5,22 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
     crossorigin="anonymous">
 
-  <link rel="stylesheet" href="/css/style.css">
+  <% if(locals.createPost) { %>
+    <!-- libraries -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="/js/summernote.min.js"></script>
+    <script src="/js/summernote-ru-RU.min.js"></script>
+    <!-- styles -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/summernote.css">
+  <% } %>
 
-  <title> <%= title %> </title>
+  <!-- <link rel="stylesheet" href="/css/style.css"> -->
+
+  <% if(locals.title) { %>
+    <title> <%= title %> </title>
+  <% } else { %>
+    <title>ZXC</title>
+  <% } %>
 </head>

@@ -73,7 +73,7 @@ class User {
         try {
             errors = [];
             const {email, password} = req.body;
-            const q = `SELECT u.user_id AS user_id, u.password AS password, r.role AS role FROM user AS u`
+            const q = `SELECT u.user_id AS user_id, u.password AS password, r.role AS role, u.nickname AS nickname FROM user AS u`
                 + ` INNER JOIN role AS r ON u.role = r.role_id WHERE u.email = '${email}'`;
             const result = await db.query(q);
 
@@ -84,6 +84,7 @@ class User {
                     // верный пароль
                     req.session.userId = result[0][0].user_id;
                     req.session.role = result[0][0].role;
+                    req.session.nickname = result[0][0].nickname;
                     res
                       .status(201)
                       .redirect('/');
@@ -117,15 +118,16 @@ class User {
         try {
             const nickname = req.params.nickname;
             if(!nickname) {
-                console.log('no nickname');
                 return res.status(404).render('notfound');
             }
-            const result = await db.query(`SELECT nickname, user_id AS id FROM user WHERE nickname='${nickname}'`);
+            let result = await db.query(`SELECT nickname, user_id AS id FROM user WHERE nickname='${nickname}'`);
 
             // если пользователь с таким ником найден
             if(result[0].length > 0) {
-                console.log(result[0][0]);
                 // TODO: user page
+                const nickname = result[0][0].nickname;
+                const user_id = result[0][0].id;
+                result = await db.query(`SELECT post_id FROM post_like WHERE user_id = ${user_id}`);
             } else {
                 return res.status(404).render('notfound', {
                     message: `Cannot find user ${req.params.nickname}`

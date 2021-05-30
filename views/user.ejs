@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('layouts/head'); -%>
+
+<body>
+  <%- include('layouts/navbar'); -%>
+  
+  <div class="container">
+        <!-- если это профиль текущего пользователя -->
+        <% if(userId == user_id) { %>
+            <p>Посты, которые вам понравились:</p>
+        <% } else { %>
+            <p>Посты, которые понравились <%= author %>:</p>
+        <% } %>
+        <div class="liked-posts">
+            <h3>zxc????</h3>
+        </div>
+  </div>
+
+  <%- include('layouts/footer'); -%>
+</body>
+</html>

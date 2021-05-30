@@ -30,10 +30,11 @@ app.use(fileUpload());
 app.use(express.static(path.resolve(__dirname, 'public')));
 
 // глобальная переменная для определения входа юзера и его роли
-global.loggedIn = global.role = null;
+global.loggedIn = global.role = global.nickname = null;
 app.use("*", (req, res, next) => {
     loggedIn = req.session.userId;
     role = req.session.role;
+    nickname = req.session.nickname;
     next();
 });
 

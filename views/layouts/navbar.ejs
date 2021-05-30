@@ -6,12 +6,12 @@
     <li>
       <a href="/">Home</a>
     </li>
-    <% if(loggedIn && role) { %>
+    <% if(loggedIn && role && nickname) { %>
       <li>
         <a href="/post/add">New Post</a>
       </li>
       <li>
-        <a href="#">Me</a>
+        <a href="/user/<%= nickname %>">Me</a>
       </li>
       <li>
         <a href="/auth/logout">Log Out</a>

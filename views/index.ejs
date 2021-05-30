@@ -8,8 +8,8 @@
   
   <div class="container">
       <h1>Home</h1>
-      <% if(loggedIn && role) { %>
-        <h2>You are logged in!</h2>
+      <% if(loggedIn && role && nickname) { %>
+        <h2>Welcome, <%= nickname %>!</h2>
       <% } else { %>
         <h2>Not authorized</h2>
       <% } %>

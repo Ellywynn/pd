@@ -124,22 +124,43 @@ class User {
             let result = await db.query(`SELECT nickname, user_id AS id, registered_at AS regtime FROM user WHERE nickname='${nickname}'`);
             // если пользователь с таким ником найден
             if(result[0].length > 0) {
-                // TODO: user page
-                const nickname = result[0][0].nickname;
+                const user = result[0][0].nickname;
                 const user_id = result[0][0].id;
+                // id понравившихся постов
                 result = await db.query(`SELECT post_id FROM post_like WHERE user_id = ${user_id}`);
-                // если пользователь имеет посты, показать их
-                if(result[0].length > 0) {
-                    let post_ids = [];
-                    for(let i = 0; i < result[0].length; i++) {
-                        post_ids.push(result[0][i].post_id);
-                    }
-                    result = await db.query(`SELECT post_id, title, last_update FROM post WHERE post_id IN (${post_ids.join()})`);
-                    res.render('user', {
-                        posts: result[0],
-                        user: nickname
-                    });
+                let post_ids = [];
+                for(let i = 0; i < result[0].length; i++) {
+                    post_ids.push(result[0][i].post_id);
                 }
+
+                // посты, которые понравились юзеру
+                result = await db.query(
+                    `SELECT p.post_id, p.title, `
+                + `DATE_FORMAT(p.last_update, '%d %M %Y at %h:%i:%s') AS last_update, `
+                + `COUNT(pl.post_id) AS likes `
+                + `FROM post AS p `
+                + `LEFT JOIN post_like AS pl ON pl.post_id = p.post_id `
+                + `WHERE p.post_id IN (${post_ids.join()}) `
+                + `GROUP BY p.post_id, p.title, last_update`);
+
+                const liked = result[0];
+
+                const q = `SELECT p.title, u.nickname AS author,`
+                + ` DATE_FORMAT(p.last_update, '%d %M %Y at %h:%i:%s') AS last_update,`
+                + ` COUNT(l.post_id) AS likes` 
+                + ` FROM post AS p INNER JOIN user AS u ON p.user_id = u.user_id`
+                + ` INNER JOIN post_like AS l ON l.post_id = p.post_id`
+                + ` WHERE p.post_id IN (${post_ids.join()})`
+                + ` GROUP BY p.title, author, last_update`;
+                result = await db.query(q);
+
+                const posts = result[0];
+
+                res.render('user', {
+                    posts,
+                    user,
+                    liked
+                });
             } else {
                 return res.status(404).render('notfound', {
                     message: `Cannot find user ${req.params.nickname}`

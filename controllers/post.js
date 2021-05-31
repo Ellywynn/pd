@@ -20,6 +20,7 @@ class Post {
         if(!post_id) {
             return res.render('notfound');
         }
+        // информация о посте
         const q = `SELECT p.title, u.nickname AS author, p.content,`
         + ` DATE_FORMAT(p.last_update, '%d %M %Y at %h:%i:%s') AS last_update,`
         + ` COUNT(l.post_id) AS likes` 

@@ -9,15 +9,17 @@
   <div class="container">
         <h1><%= user %></h1>
 
-        <div class="posts">
-            <% if(nickname == user) { %>
-                <p>Ваши посты:</p>
-            <% } else { %>
-                <p>Посты пользователя <%= user %>:</p>
-            <% } %>
+        <% if(nickname == user) { %>
+            <p>Ваши посты:</p>
+        <% } else { %>
+            <p>Посты пользователя <%= user %>:</p>
+        <% } %>
 
+        <div class="posts">
             <% for(let i = 0; i < posts.length; i++) { %>
-                <a href="/post/<%= posts[i].post_id %>"><%= posts[i].title %> at <%= posts[i].last_update %></a>
+                <div class="post">
+                    <a href="/post/<%= posts[i].post_id %>"><%= posts[i].title %> at <%= posts[i].last_update %></a>
+                </div>
             <% } %>
         </div>
 
@@ -28,7 +30,11 @@
             <p>Посты, которые понравились <%= user %>:</p>
         <% } %>
         <div class="liked-posts">
-            <h3>zxc????</h3>
+            <% for(let i = 0; i < liked.length; i++) { %>
+                <div class="post">
+                    <a href="/post/<%= liked[i].post_id %>"><%= liked[i].title %> at <%= liked[i].last_update %></a>
+                </div>
+            <% } %>
         </div>
   </div>
 

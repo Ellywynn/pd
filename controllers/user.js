@@ -1,6 +1,7 @@
 const db = require('../config/database');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const e = require('cors');
 
 // round count for generating salt
 const roundCount = 11;
@@ -120,14 +121,25 @@ class User {
             if(!nickname) {
                 return res.status(404).render('notfound');
             }
-            let result = await db.query(`SELECT nickname, user_id AS id FROM user WHERE nickname='${nickname}'`);
-
+            let result = await db.query(`SELECT nickname, user_id AS id, registered_at AS regtime FROM user WHERE nickname='${nickname}'`);
             // если пользователь с таким ником найден
             if(result[0].length > 0) {
                 // TODO: user page
                 const nickname = result[0][0].nickname;
                 const user_id = result[0][0].id;
                 result = await db.query(`SELECT post_id FROM post_like WHERE user_id = ${user_id}`);
+                // если пользователь имеет посты, показать их
+                if(result[0].length > 0) {
+                    let post_ids = [];
+                    for(let i = 0; i < result[0].length; i++) {
+                        post_ids.push(result[0][i].post_id);
+                    }
+                    result = await db.query(`SELECT post_id, title, last_update FROM post WHERE post_id IN (${post_ids.join()})`);
+                    res.render('user', {
+                        posts: result[0],
+                        user: nickname
+                    });
+                }
             } else {
                 return res.status(404).render('notfound', {
                     message: `Cannot find user ${req.params.nickname}`

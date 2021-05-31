@@ -7,7 +7,11 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
-    <h2><%= title %> by <%= author %> at <%= last_update %></h2>
+    <h2><%= title %> by <a href="/user/<%= author %>"><%= author %></a> at <%= last_update %></h2>
+    <% if(author == nickname) { %>
+      <button>edit</button>
+      <button>delete</button>
+    <% } %>
     <%= content %>
   </div>
 

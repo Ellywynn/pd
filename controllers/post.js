@@ -41,11 +41,13 @@ class Post {
         const post_id = req.params.post_id;
         const result = await db.query(`SELECT title, user_id, content FROM post WHERE post_id=${post_id}`);
         if(result[0].length > 0) {
-            // если это чужой пост
+            // если это чужой пост или нет прав
             if(result[0][0].user_id !== req.session.userId
                 || req.session.role !== 'owner' || req.session.role !== 'admin'
                 || req.session.role !== 'moderator') {
-                res.redirect('/');
+                return res.render('notfound', {
+                    message: 'У вас нет прав на это действие'
+                });
             } else {
                 const postTitle = result[0][0].title;
                 const postContent = result[0][0].content;
@@ -61,7 +63,23 @@ class Post {
         }
     }
     async deletePost(req, res) {
-        
+        const post_id = req.params.post_id;
+        const result = await db.query(`SELECT user_id FROM post WHERE post_id=${post_id}`);
+        if(result[0].length > 0) {
+            // если это чужой пост или нет прав
+            if(result[0][0].user_id !== req.session.userId
+                || req.session.role !== 'owner' || req.session.role !== 'admin'
+                || req.session.role !== 'moderator') {
+                return res.render('notfound', {
+                    message: 'У вас нет прав на это действие'
+                });
+            } else {
+                await db.query(`DELETE FROM post WHERE post_id=${post_id}`);
+            }
+        } else {
+            // there is no post with this id
+            res.redirect('/');
+        }
     }
 }
 

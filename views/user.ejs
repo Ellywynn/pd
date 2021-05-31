@@ -7,11 +7,25 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
+        <h1><%= user %></h1>
+
+        <div class="posts">
+            <% if(nickname == user) { %>
+                <p>Ваши посты:</p>
+            <% } else { %>
+                <p>Посты пользователя <%= user %>:</p>
+            <% } %>
+
+            <% for(let i = 0; i < posts.length; i++) { %>
+                <a href="/post/<%= posts[i].post_id %>"><%= posts[i].title %> at <%= posts[i].last_update %></a>
+            <% } %>
+        </div>
+
         <!-- если это профиль текущего пользователя -->
-        <% if(userId == user_id) { %>
+        <% if(nickname == user) { %>
             <p>Посты, которые вам понравились:</p>
         <% } else { %>
-            <p>Посты, которые понравились <%= author %>:</p>
+            <p>Посты, которые понравились <%= user %>:</p>
         <% } %>
         <div class="liked-posts">
             <h3>zxc????</h3>

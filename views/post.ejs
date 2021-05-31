@@ -7,12 +7,28 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
-    <h2><%= title %> by <a href="/user/<%= author %>"><%= author %></a> at <%= last_update %></h2>
-    <% if(author == nickname) { %>
-      <button>edit</button>
-      <button>delete</button>
-    <% } %>
+    <div class="post">
+      <h2><%= title %> by <a href="/user/<%= author %>"><%= author %></a> at <%= last_update %></h2>
+      <% if(author == nickname) { %>
+        <button>edit</button>
+        <button>delete</button>
+      <% } %>
     <%= content %>
+    </div>
+    <div class="info"><i class="fa fa-heart"></i> <%= likes %></div>
+    <div class="comments">
+    <% if(comments.length > 0) { %>
+      <p>Найдено <%= comments.length %> комментариев</p>
+      <% for(let i = 0; i < comments.length; i++) { %>
+        <div class="post">
+          <p><%= comments[i].author %>: <%= comments[i].content %> // <%= comments[i].last_update %></p>
+          <a href="#"><i class="fa fa-heart"></i> <%= comments[i].likes %></a>
+      </div>
+      <% } %>
+    <% } else { %>
+      <p>Никто еще не комментировал эту запись</p>
+    <% } %>
+  </div>
   </div>
 
   <%- include('layouts/footer'); -%>

@@ -20,14 +20,36 @@ class Post {
         if(!post_id) {
             return res.render('notfound');
         }
-        const q = `SELECT p.title, u.nickname AS author, p.content, p.last_update FROM post AS p INNER JOIN user AS u ON p.user_id = u.user_id WHERE p.post_id=${post_id}`;
-        const result = await db.query(q);
+        const q = `SELECT p.title, u.nickname AS author, p.content,`
+        + ` DATE_FORMAT(p.last_update, '%d %M %Y at %h:%i:%s') AS last_update,`
+        + ` COUNT(l.post_id) AS likes` 
+        + ` FROM post AS p INNER JOIN user AS u ON p.user_id = u.user_id`
+        + ` INNER JOIN post_like AS l ON l.post_id = ${post_id}`
+        + ` WHERE p.post_id=${post_id}`;
+        let result = await db.query(q);
         if(result[0].length > 0) {
+            const title = result[0][0].title;
+            const author = result[0][0].author;
+            const content = result[0][0].content;
+            const likes = result[0][0].likes;
             const last_update = result[0][0].last_update;
+            const q =
+                  ` SELECT c.content,`
+                + ` DATE_FORMAT(c.last_update, '%d %M %Y at %h:%i:%s') AS last_update,`
+                + ` u.nickname AS author, COUNT(cl.user_id) AS likes `
+                + ` FROM comment AS c`
+                + ` INNER JOIN user AS u ON u.user_id = c.user_id`
+                + ` LEFT JOIN comment_like AS cl ON cl.comment_id = c.comment_id`
+                + ` WHERE c.post_id = ${post_id}`
+                + ` GROUP BY c.content, c.last_update, author`;
+            result = await db.query(q);
+            const comments = result[0];
             res.render('post', {
-                title: result[0][0].title,
-                author: result[0][0].author,
-                content: result[0][0].content,
+                title,
+                author,
+                content,
+                likes,
+                comments,
                 last_update
             });
         } else {
@@ -39,7 +61,8 @@ class Post {
     }
     async editPostPage(req, res) {
         const post_id = req.params.post_id;
-        const result = await db.query(`SELECT title, user_id, content FROM post WHERE post_id=${post_id}`);
+        const result = await db.query(`SELECT title, user_id, content FROM post `
+        + `WHERE post_id=${post_id}`);
         if(result[0].length > 0) {
             // если это чужой пост или нет прав
             if(result[0][0].user_id !== req.session.userId

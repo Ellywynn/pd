@@ -44,8 +44,8 @@ class User {
                 const hashedPassword = await bcrypt.hash(password, roundCount);
 
                 // create user
-                q = 'INSERT INTO user (email, password, nickname, registered_at) VALUES('
-                + `'${email}', '${hashedPassword}', '${nickname}', NOW())`;
+                q = `INSERT INTO user (email, password, nickname, registered_at) VALUES(
+                    '${email}', '${hashedPassword}', '${nickname}', NOW())`;
                 await db.query(q);
 
                 res
@@ -74,8 +74,9 @@ class User {
         try {
             errors = [];
             const {email, password} = req.body;
-            const q = `SELECT u.user_id AS user_id, u.password AS password, r.role AS role, u.nickname AS nickname FROM user AS u`
-                + ` INNER JOIN role AS r ON u.role = r.role_id WHERE u.email = '${email}'`;
+            const q = `SELECT u.user_id AS user_id, u.password AS password,
+                    r.role AS role, u.nickname AS nickname FROM user AS u
+                    INNER JOIN role AS r ON u.role = r.role_id WHERE u.email = '${email}'`;
             const result = await db.query(q);
 
             // пользователь существует
@@ -172,7 +173,7 @@ class User {
                 });
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 }

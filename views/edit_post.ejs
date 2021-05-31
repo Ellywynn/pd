@@ -7,13 +7,20 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
-    <form method="post" action="/post/add">
+    <form method="post" action="
+      <% if(locals.postContent && locals.postTitle && locals.post_id) { %>
+        /post/edit/<%= post_id %>
+      <% } else { %>
+        /post/add
+      <% } %>
+    ">
       <input type="text" name="title"
         placeholder="Заголовок..."
+        required
         value=<% if(locals.postTitle) { %>
           <%= postTitle %>
         <% } %>> <br> <br>
-      <textarea id="summernote" name="editordata">
+      <textarea required id="summernote" name="editordata">
         <% if(locals.postContent) { %>
           <%- postContent %>
         <% } %>

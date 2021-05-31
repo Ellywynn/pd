@@ -4,27 +4,26 @@
 <nav>
   <ul>
     <li>
-      <a href="/">Home</a>
+      <a href="/">Главная</a>
     </li>
     <% if(loggedIn && role && nickname) { %>
       <li>
-        <a href="/post/add">New Post</a>
+        <a href="/post/add">Новый пост</a>
       </li>
       <li>
-        <a href="/user/<%= nickname %>">Me</a>
+        <a href="/user/<%= nickname %>">Мой профиль</a>
       </li>
       <li>
-        <a href="/auth/logout">Log Out</a>
+        <a href="/auth/logout">Выйти</a>
       </li>
     <% } else { %>
       <li>
-        <a href="/auth/register">Sign Up</a>
+        <a href="/auth/register">Зарегистрироваться</a>
       </li>
       <li>
-        <a href="/auth/login">Log In</a>
+        <a href="/auth/login">Войти</a>
       </li>
     <% } %>
-    
   </ul>
 </nav>
 </header>

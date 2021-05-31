@@ -8,26 +8,37 @@
   
   <div class="container">
     <div class="post">
-      <h2><%= title %> by <a href="/user/<%= author %>"><%= author %></a> <%= last_update %></h2>
+      <h2><%= title %></h2>
+      <p>by <a href="/user/<%= author %>"><%= author %></a> <span><%= last_update %></span></p>
       <% if(author == nickname) { %>
-        <a href="/post/edit/<%= post_id %>">Edit</a>
-        <a href="/post/delete/<%= post_id %>">Delete</a>
+        <a href="/post/edit/<%= post_id %>">Изменить</a>
+        <a href="/post/delete/<%= post_id %>">Удалить</a>
+        <br>
       <% } %>
-      <%= content %>
+      <%- content %>
     </div>
     <div class="info"><i class="fa fa-heart"></i> <%= likes %></div>
     <div class="comments">
-    <% if(comments.length > 0) { %>
-      <p>Найдено <%= comments.length %> комментариев</p>
-      <% for(let i = 0; i < comments.length; i++) { %>
-        <div class="post">
-          <p><%= comments[i].author %>: <%= comments[i].content %> // <%= comments[i].last_update %></p>
-          <a href="#"><i class="fa fa-heart"></i> <%= comments[i].likes %></a>
-        </div>
+      <% if(comments.length > 0) { %>
+        <p>Найдено <%= comments.length %> комментариев</p>
+        <% for(let i = 0; i < comments.length; i++) { %>
+          <div class="post">
+            <p><%= comments[i].author %>: <%= comments[i].content %> // <%= comments[i].last_update %></p>
+            <a href="#"><i class="fa fa-heart"></i> <%= comments[i].likes %></a>
+          </div>
+        <% } %>
+      <% } else { %>
+        <p>Никто еще не комментировал эту запись</p>
       <% } %>
-    <% } else { %>
-      <p>Никто еще не комментировал эту запись</p>
-    <% } %>
+      <% if(loggedIn) { %>
+        <form action="/post/comment/<%= post_id %>" method="post">
+          <textarea name="comment" rows="10" cols="40" placeholder="Оставить комментарий.."></textarea>
+          <br>
+          <button type="submit">Отправить</button>
+        </form>
+      <% } else { %>
+        <p>Войдите, чтобы оставить комментарий</p>
+      <% } %>
   </div>
 
   <%- include('layouts/footer'); -%>

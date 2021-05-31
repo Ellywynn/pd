@@ -7,11 +7,11 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
-      <h1>Home</h1>
+      <h1>Главная</h1>
       <% if(loggedIn && role && nickname) { %>
-        <h2>Welcome, <%= nickname %>!</h2>
+        <h2>Добрый день, <%= nickname %>!</h2>
       <% } else { %>
-        <h2>Not authorized</h2>
+        <h2>Войдите</h2>
       <% } %>
   </div>
 

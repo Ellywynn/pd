@@ -8,12 +8,12 @@
   
   <div class="container">
     <div class="post">
-      <h2><%= title %> by <a href="/user/<%= author %>"><%= author %></a> at <%= last_update %></h2>
+      <h2><%= title %> by <a href="/user/<%= author %>"><%= author %></a> <%= last_update %></h2>
       <% if(author == nickname) { %>
-        <button>edit</button>
-        <button>delete</button>
+        <a href="/post/edit/<%= post_id %>">Edit</a>
+        <a href="/post/delete/<%= post_id %>">Delete</a>
       <% } %>
-    <%= content %>
+      <%= content %>
     </div>
     <div class="info"><i class="fa fa-heart"></i> <%= likes %></div>
     <div class="comments">
@@ -23,12 +23,11 @@
         <div class="post">
           <p><%= comments[i].author %>: <%= comments[i].content %> // <%= comments[i].last_update %></p>
           <a href="#"><i class="fa fa-heart"></i> <%= comments[i].likes %></a>
-      </div>
+        </div>
       <% } %>
     <% } else { %>
       <p>Никто еще не комментировал эту запись</p>
     <% } %>
-  </div>
   </div>
 
   <%- include('layouts/footer'); -%>

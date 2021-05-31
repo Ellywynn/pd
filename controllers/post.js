@@ -2,18 +2,22 @@ const db = require('../config/database');
 
 class Post {
     async createPost(req, res) {
-        console.log('User:', req.session.userId);
-        console.log('Title:', req.body.title);
-        console.log('Content:', req.body.editordata);
-        res.redirect('/post/add');
+        try {
+            const title = req.body.title;
+            const content = req.body.editordata;
+            const userId = loggedIn;
+            const q = `INSERT INTO post(title, user_id, content)
+            VALUES('${title}', ${userId}, '${content}')`;
+            const result = await db.query(q);
+            res.redirect(`/user/${nickname}`);
+        } catch(error) {
+            console.error(error.sqlMessage);
+        }
     }
     async createPostPage(req, res) {
         res.render('edit_post', {
             createPost: true
         });
-    }
-    async getAllPosts(req, res) {
-        
     }
     async getOnePost(req, res) {
         const post_id = req.params.post_id;
@@ -21,14 +25,15 @@ class Post {
             return res.render('notfound');
         }
         // информация о посте
-        const q = `SELECT p.title, u.nickname AS author, p.content,`
+        const q = `SELECT p.post_id, p.title, u.nickname AS author, p.content,`
         + ` DATE_FORMAT(p.last_update, '%d %M %Y at %h:%i:%s') AS last_update,`
         + ` COUNT(l.post_id) AS likes` 
         + ` FROM post AS p INNER JOIN user AS u ON p.user_id = u.user_id`
         + ` INNER JOIN post_like AS l ON l.post_id = ${post_id}`
-        + ` WHERE p.post_id=${post_id}`;
+        + ` WHERE p.post_id = ${post_id}`;
         let result = await db.query(q);
         if(result[0].length > 0) {
+            const post_id = result[0][0].post_id;
             const title = result[0][0].title;
             const author = result[0][0].author;
             const content = result[0][0].content;
@@ -46,6 +51,7 @@ class Post {
             result = await db.query(q);
             const comments = result[0];
             res.render('post', {
+                post_id,
                 title,
                 author,
                 content,
@@ -90,15 +96,17 @@ class Post {
         const post_id = req.params.post_id;
         const result = await db.query(`SELECT user_id FROM post WHERE post_id=${post_id}`);
         if(result[0].length > 0) {
-            // если это чужой пост или нет прав
+            console.log(result[0][0].user_id === req.session.userId);
+            // если это чужой пост и при этом нет прав
             if(result[0][0].user_id !== req.session.userId
-                || req.session.role !== 'owner' || req.session.role !== 'admin'
-                || req.session.role !== 'moderator') {
+                && (req.session.role !== 'owner' || req.session.role !== 'admin'
+                || req.session.role !== 'moderator')) {
                 return res.render('notfound', {
                     message: 'У вас нет прав на это действие'
                 });
             } else {
                 await db.query(`DELETE FROM post WHERE post_id=${post_id}`);
+                res.redirect(`/user/${nickname}`);
             }
         } else {
             // there is no post with this id

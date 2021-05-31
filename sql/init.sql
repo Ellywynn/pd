@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `post` (
 
     FOREIGN KEY(user_id)
     REFERENCES user(user_id)
+    ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS `comment` (
@@ -47,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
 
     FOREIGN KEY(post_id)
     REFERENCES post(post_id)
+    ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS `post_like` (
@@ -58,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `post_like` (
 
     FOREIGN KEY(post_id)
     REFERENCES post(post_id)
+    ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS `comment_like` (
@@ -69,11 +72,10 @@ CREATE TABLE IF NOT EXISTS `comment_like` (
 
     FOREIGN KEY(comment_id)
     REFERENCES comment(comment_id)
+    ON DELETE CASCADE
 ) ENGINE=INNODB;
 
 INSERT INTO role (role) VALUES('owner');
 INSERT INTO role (role) VALUES('admin');
 INSERT INTO role (role) VALUES('default');
 INSERT INTO role (role) VALUES('moderator');
-
-INSERT INTO user (email, password, nickname, role) VALUES('helloworld@gmail.com', 'asdf123', 'ellywynn', 1);

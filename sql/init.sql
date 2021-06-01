@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `role` (
-    role_id INT NOT NULL AUTO_INCREMENT,
+    role_id TINYINT(1) NOT NULL AUTO_INCREMENT,
     role VARCHAR(20) NOT NULL,
 
     PRIMARY KEY(role_id)
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     password VARCHAR(255) NOT NULL,
     avatar_path VARCHAR(100) NOT NULL DEFAULT 'default.png',
     nickname VARCHAR(40) NOT NULL,
-    role INT NOT NULL DEFAULT 3,
+    role TINYINT(1) NOT NULL DEFAULT 3,
     registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY(user_id),
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `post` (
     post_id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(150) NOT NULL,
     user_id INT NOT NULL,
-    content TEXT NOT NULL, -- post content (stored like innerHTML)
+    content VARCHAR(65535) NOT NULL, -- post content (stored like innerHTML)
     last_update DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY(post_id),

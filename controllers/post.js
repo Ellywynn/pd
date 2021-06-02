@@ -14,24 +14,6 @@ class Post {
             console.error(error.sqlMessage);
         }
     }
-    async addComment(req, res) {
-        try {
-            const post_id = req.params.post_id;
-            let result = await db.query(`SELECT post_id FROM post WHERE post_id=${post_id}`);
-            // если пост найден
-            if(result[0].length > 0) {
-                result = await db.query(`INSERT INTO comment(user_id, post_id, content)
-                VALUES(${loggedIn}, ${post_id}, '${req.body.comment}')`);
-                res.redirect(`/post/${post_id}`);
-            } else {
-                res.render('notfound', {
-                    message: 'Пост не найден'
-                });
-            }
-        } catch (error) {
-            
-        }
-    }
     async createPostPage(req, res) {
         res.render('edit_post', {
             createPost: true

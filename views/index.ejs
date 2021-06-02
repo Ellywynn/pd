@@ -10,11 +10,25 @@
       <h1>Главная</h1>
       <% if(loggedIn && role && nickname) { %>
         <h2>Добрый день, <%= nickname %>!</h2>
+        <button class="test">click</button>
       <% } else { %>
         <h2>Войдите</h2>
       <% } %>
   </div>
 
   <%- include('layouts/footer'); -%>
+  <script>
+    $(document).ready(() => {
+      $('.test').on('click', (e) => {
+        e.stopPropagation();
+        $.ajax({
+          type: 'POST',
+          url: '/comment/like/1',
+          success: () => alert('done!'),
+          error: () => alert('error :(')
+        });
+      })
+    });
+  </script>
 </body>
 </html>

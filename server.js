@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index');
 const postRouter = require('./routes/post');
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
+const commentRouter = require('./routes/comment');
 
 // порт сервера
 const PORT = process.env.PORT || 80;
@@ -43,8 +44,10 @@ app.use('/', indexRouter);
 app.use('/post', postRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/comment', commentRouter);
+
 // 404 error
-app.use((req, res) => res.render('notfound', { title: 'Invalid Link' }));
+app.use((req, res) => res.render('notfound', { title: '#404: Page Not Found' }));
 
 // template engine
 app.set('view engine', 'ejs');

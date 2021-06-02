@@ -48,11 +48,18 @@ class User {
                     '${email}', '${hashedPassword}', '${nickname}', NOW())`;
                 await db.query(q);
 
+                // сразу войти при создании пользователя
+                q = `SELECT u.user_id AS user_id, u.password AS password,
+                    r.role AS role, u.nickname AS nickname FROM user AS u
+                    INNER JOIN role AS r ON u.role = r.role_id WHERE u.email = '${email}'`;
+                const result = await db.query(q);
+
+                req.session.userId = result[0][0].user_id;
+                req.session.role = result[0][0].role;
+                req.session.nickname = result[0][0].nickname;
                 res
-                  .status(201)
-                  .render('index', {
-                    title: 'Main Page'
-                });
+                    .status(200)
+                    .redirect('/');
             } else {                
                 // если пользователь уже существует, сообщить об этом
                 res
@@ -88,7 +95,7 @@ class User {
                     req.session.role = result[0][0].role;
                     req.session.nickname = result[0][0].nickname;
                     res
-                      .status(201)
+                      .status(200)
                       .redirect('/');
                 } else {
                     // неверный пароль

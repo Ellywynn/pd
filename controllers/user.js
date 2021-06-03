@@ -1,7 +1,6 @@
 const db = require('../config/database');
 const path = require('path');
 const bcrypt = require('bcrypt');
-const e = require('cors');
 
 // round count for generating salt
 const roundCount = 11;
@@ -127,11 +126,21 @@ class User {
         try {
             const nickname = req.params.nickname;
             let result = await db.query(`SELECT nickname, user_id AS id,
-             registered_at AS regtime FROM user WHERE nickname='${nickname}'`);
+             registered_at AS regtime, avatar_path
+             FROM user WHERE nickname='${nickname}'`);
             // если пользователь с таким ником найден
             if(result[0].length > 0) {
                 const user = result[0][0].nickname;
                 const user_id = result[0][0].id;
+                const regTime = result[0][0].regtime;
+                let avatar_path = result[0][0].avatar_path;
+
+                if(avatar_path !== 'default.png') {
+                    avatar_path = '/users/' + avatar_path;
+                } else {
+                    avatar_path = '/' + avatar_path;
+                }
+
                 let liked = [];
                 let posts = [];
                 // id понравившихся постов
@@ -147,7 +156,7 @@ class User {
                     // посты, которые понравились юзеру
                     result = await db.query(
                         `SELECT p.post_id, p.title, 
-                        DATE_FORMAT(p.last_update, '%d %M %Y at %h:%i:%s') AS last_update,
+                        DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
                         COUNT(pl.post_id) AS likes
                         FROM post AS p 
                         LEFT JOIN post_like AS pl ON pl.post_id = p.post_id 
@@ -159,7 +168,7 @@ class User {
 
                 // посты, сделанные пользователем
                 const q = ` SELECT p.post_id, p.title, u.nickname AS author,
-                            DATE_FORMAT(p.last_update, '%d %M %Y at %h:%i:%s') AS last_update,
+                            DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
                             COUNT(l.post_id) AS likes
                             FROM post AS p INNER JOIN user AS u ON p.user_id = u.user_id
                             LEFT JOIN post_like AS l ON l.post_id = p.post_id
@@ -172,7 +181,9 @@ class User {
                 res.render('user', {
                     posts,
                     user,
-                    liked
+                    liked,
+                    regTime,
+                    avatar_path
                 });
             } else {
                 return res.status(404).render('notfound', {
@@ -181,6 +192,34 @@ class User {
             }
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    async uploadImage(req, res, next) {
+        const avatar = req.files.avatar;
+        // если файл неправильного формата
+        if(avatar.mimetype !== 'image/png' && avatar.mimetype !== 'image/jpeg') {
+            return res.render('notfound', {
+                message: 'Можно загружать только файлы формата .png, .jpeg, .jpg'
+            });
+            // если размер файла больше двух мегабайт
+        } else if(avatar.size > 2097152) {
+            return res.render('notfound', {
+                message: 'Размер файла слишком большой'
+            });
+        } else {
+            try {
+                // если файл удовлетворяет требованиям
+                const filename = nickname + '.' + avatar.mimetype.split('/')[1];
+                avatar.mv(path.resolve(__dirname, '..', 'public', 'users', filename));
+
+                const q = `UPDATE user SET avatar_path = '${filename}' WHERE nickname = '${nickname}'`;
+                await db.query(q);
+
+                res.redirect(`/user/${nickname}`);
+            } catch(error) {
+                console.error(error);
+            }
         }
     }
 }

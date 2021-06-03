@@ -16,16 +16,39 @@ class Comment {
                 });
             }
         } catch (error) {
-            
+            console.error(error);
         }
     }
     async likeComment(req, res) {
-        const comment_id = req.params.comment_id;
-        
+        try {
+            const comment_id = req.params.comment_id;
+            const user_id = loggedIn;
+            await db.query(`INSERT INTO comment_like(user_id, comment_id)
+                VALUES(${user_id}, ${comment_id})`);
+            res.sendStatus(200);
+        } catch (error) {
+            console.error(error);
+        }
     }
     async dislikeComment(req, res) {
-        const comment_id = req.params.comment_id;
-
+        try {
+            const comment_id = req.params.comment_id;
+            const user_id = loggedIn;
+            await db.query(`DELETE from comment_like
+             WHERE user_id = ${user_id} AND comment_id = ${comment_id}`);
+            res.sendStatus(200);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async deleteComment(req, res) {
+        try {
+            const comment_id = req.params.comment_id;
+            await db.query(`DELETE FROM comment WHERE comment_id = ${comment_id}`);
+            res.sendStatus(200);
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 

@@ -26,7 +26,7 @@ class Post {
         }
         // информация о посте
         const q = `SELECT p.post_id, p.title, u.nickname AS author, p.content,
-                DATE_FORMAT(p.last_update, '%d %M %Y at %h:%i:%s') AS last_update,
+                DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
                 COUNT(l.post_id) AS likes
                 FROM post AS p INNER JOIN user AS u ON p.user_id = u.user_id
                 INNER JOIN post_like AS l ON l.post_id = ${post_id}
@@ -41,7 +41,7 @@ class Post {
             const last_update = result[0][0].last_update;
             const q =
                   `SELECT c.content,
-                   DATE_FORMAT(c.last_update, '%d %M %Y at %h:%i:%s') AS last_update,
+                   DATE_FORMAT(c.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
                    u.nickname AS author, COUNT(cl.user_id) AS likes
                    FROM comment AS c
                    INNER JOIN user AS u ON u.user_id = c.user_id

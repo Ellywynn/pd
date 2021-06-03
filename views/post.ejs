@@ -24,14 +24,14 @@
         <% for(let i = 0; i < comments.length; i++) { %>
           <div class="post">
             <p><%= comments[i].author %>: <%= comments[i].content %> // <%= comments[i].last_update %></p>
-            <a href="#"><i class="fa fa-heart"></i> <%= comments[i].likes %></a>
+            <button class="like-btn"><i class="fa fa-heart"></i> <%= comments[i].likes %></button>
           </div>
         <% } %>
       <% } else { %>
         <p>Никто еще не комментировал эту запись</p>
       <% } %>
       <% if(loggedIn) { %>
-        <form action="/post/comment/<%= post_id %>" method="post">
+        <form action="/comment/<%= post_id %>" method="post">
           <textarea maxlength="2000" name="comment" rows="10" cols="40" placeholder="Оставить комментарий.."></textarea>
           <br>
           <button type="submit">Отправить</button>

@@ -126,7 +126,7 @@ class User {
         try {
             const nickname = req.params.nickname;
             let result = await db.query(`SELECT nickname, user_id AS id,
-             registered_at AS regtime, avatar_path
+             DATE_FORMAT(registered_at, '%Y-%m-%i') AS regtime, avatar_path
              FROM user WHERE nickname='${nickname}'`);
             // если пользователь с таким ником найден
             if(result[0].length > 0) {
@@ -144,10 +144,12 @@ class User {
                 let liked = [];
                 let posts = [];
                 // id понравившихся постов
-                result = await db.query(`SELECT post_id FROM post_like WHERE user_id = ${user_id}`);
+                result = await db.query(`SELECT COUNT(post_id) AS liked FROM post_like WHERE user_id = ${user_id}`);
+
+                const likedCount = result[0][0].liked;
 
                 // если пользователь оценил какие-то посты, получить их
-                if(result[0].length > 0) {
+                if(likedCount > 0) {
                     let post_ids = [];
                     for(let i = 0; i < result[0].length; i++) {
                         post_ids.push(result[0][i].post_id);
@@ -178,16 +180,20 @@ class User {
 
                 posts = result[0];
 
+                const postCount = posts.length;
+
                 res.render('user', {
                     posts,
                     user,
                     liked,
                     regTime,
+                    likedCount,
+                    postCount,
                     avatar_path
                 });
             } else {
                 return res.status(404).render('notfound', {
-                    message: `Cannot find user ${req.params.nickname}`
+                    message: `Пользователь не найден`
                 });
             }
         } catch (error) {

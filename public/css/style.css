@@ -10,6 +10,10 @@ html, body {
     height: 100%;
 }
 
+body {
+    padding-top: 120px;
+}
+
 a {
     text-decoration: none;
 }
@@ -24,6 +28,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 6rem;
+    background-color: #ddd;
 }
 
 header .site-icon {
@@ -41,7 +46,7 @@ header nav ul {
 }
 
 .errors {
-    margin: 5px 0;
+    margin-bottom: 15px;
     width: 30%;
 }
 
@@ -76,12 +81,11 @@ header nav li a {
 
 .login-title {
     font-size: 50px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-weight: 400;
 }
 
 #logo {
-    margin-top: 120px;
     margin-bottom: 50px;
 }
 
@@ -124,4 +128,44 @@ input{
 .required-field {
     margin-bottom: 0.5rem;
     color: red;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-info .main-info {
+    width: 30%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.main-info .user-avatar{
+    width: 85%;
+}
+
+.user-info .other-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 450px;
+}
+
+.user-info .other-info p {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.other-info .user-nickname{
+    font-size: 50px;
+    font-weight: 400;
+}
+
+#avatar-lable {
+    display: inline;
 }

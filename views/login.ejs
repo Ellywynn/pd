@@ -7,24 +7,24 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
-    <h1>Login</h1>
+    <img id="logo" src="/img/POLYVIEW.png" alt="">
 
-    <% for(let i = 0; i < errors.length; i++) { %>
-      <h2><%= errors[i] %></h2>
-    <% } %>
+    <h1 class="login-title">Вход</h1>
 
-    <form action="/auth/login" method="post">
+    <div class="errors">
+      <% for(let i = 0; i < errors.length; i++) { %>
+        <h2 class="error"><%= errors[i] %></h2>
+      <% } %>
+    </div>
+
+    <form class="login-form" action="/auth/login" method="post">
         <label for="login">Email:</label>
         <input type="text" name="email" id="email" required value=<%= email %>>
         <label for="password">Пароль:</label>
         <input type="password" name="password" id="pass1" required value=<%= password %>> 
 
-        <br> <br>
-
         <button type="submit">Войти</button>
     </form>
   </div>
-
-  <%- include('layouts/footer'); -%>
 </body>
 </html>

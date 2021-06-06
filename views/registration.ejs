@@ -7,30 +7,30 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
-    <h1>Registration</h1>
+    <img id="logo" src="/img/POLYVIEW.png" alt="">
 
-    <% for(let i = 0; i < errors.length; i++) { %>
-      <h2><%= errors[i] %></h2>
-    <% } %>
+    <h1 class="login-title">Регистрация</h1>
 
-    <form action="/auth/register" method="post">
+    <div class="errors">
+      <% for(let i = 0; i < errors.length; i++) { %>
+        <h2 class="error"><%= errors[i] %></h2>
+      <% } %>
+    </div>
+
+    <form class="register-form" action="/auth/register" method="post">
         <label for="nickname">Username:<span class="required-field">*</span></label>
         <input type="text" name="nickname" id="username" required value=<%= nickname %>>
         <label for="email">Email:<span class="required-field">*</span></label>
         <input type="email" name="email" id="email" required value=<%= email %>> 
-        <label for="password">Password:<span class="required-field">*</span></label>
+        <label for="password">Пароль:<span class="required-field">*</span></label>
         <input type="password" name="password" id="pass1" required value=<%= password %>> 
-        <label>Repeat password:<span class="required-field">*</span></label>
+        <label>Повторите пароль:<span class="required-field">*</span></label>
         <input type="password" id="pass2" required value=<%= password %>>
 
-        <br>
+        <p class="required-field">* - обязательное поле</p>
 
-        <p class="required-field">* - required</p>
-
-        <button type="submit">Register</button>
+        <button type="submit">Зарегистрироваться</button>
     </form>
   </div>
-
-  <%- include('layouts/footer'); -%>
 </body>
 </html>

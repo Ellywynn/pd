@@ -11,7 +11,9 @@ html, body {
 }
 
 body {
-    padding-top: 120px;
+    padding-top: 100px;
+    display: flex;
+    justify-content: center;
 }
 
 a {
@@ -43,6 +45,7 @@ header .site-icon img {
 header nav ul {
     display: flex;
     list-style: none;
+    margin: 0;
 }
 
 .errors {
@@ -69,11 +72,19 @@ header nav li a {
     margin: 0 1rem;
     color: #000;
     font-size: 20px;
+    outline: none;
+    text-decoration: none;
 }
 
+header nav li a:-webkit-any-link {
+    color: #000;
+    cursor: pointer;
+    text-decoration: none;
+}
 .container {
+    width: 100%;
+    max-width: 1200px;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
     padding-bottom: 60px;
@@ -93,6 +104,9 @@ header nav li a {
     width: 30%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
 }
 
 .login-form input, .register-form input{
@@ -120,7 +134,7 @@ label {
     margin-bottom: 0.5rem;
 }
 
-input{
+.login-form input, .register-form input{
     display: block;
     margin-bottom: 0.5rem;
 }
@@ -131,29 +145,55 @@ input{
 }
 
 .user-info {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 25px;
 }
 
 .user-info .main-info {
     width: 30%;
-    height: 500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    height: 300px;
+    margin: 10px;
 }
 
 .main-info .user-avatar{
-    width: 85%;
+    width: 100%;
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 50%;
+}
+
+.change-avatar {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.change-avatar label {
+    font-size: 20px;
+    margin-bottom: 0.2rem;
+}
+
+.change-avatar input {
+    font-size: 18px;
+}
+
+.change-avatar button {
+    margin-top: 0.2rem;
+    width: 150px;
+    font-size: 18px;
+    height: 25px;
+    display: block;
 }
 
 .user-info .other-info {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    height: 450px;
+    height: 100%;
 }
 
 .user-info .other-info p {
@@ -166,6 +206,101 @@ input{
     font-weight: 400;
 }
 
-#avatar-lable {
-    display: inline;
+.user-posts {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-posts .user-info {
+    font-size: 30px;
+}
+
+.posts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.post {
+    width: 80%;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 40px;
+}
+
+.author-date {
+    width: 100%;
+    height: 60px;
+    display: flex;
+}
+
+.author-date div{
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.post-title {
+    text-decoration: none;
+    color: #000;
+    font-size: 40px;
+}
+
+.post-avatar {
+    width: 50px;
+    height: 50px;
+}
+
+.post-avatar > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
+}
+
+.post-author {
+    font-size: 20px;
+}
+
+.post-time {
+    font-size: 14px;
+}
+
+.likes-comments {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+}
+
+.likes-comments .post-likes{
+    margin-right: 10px;
+}
+
+.new-post-title {
+    width: 100%;
+    height: 40px;
+    font-size: 20px;
+    margin-bottom: 1.5rem;
+    padding: 0 10px;
+    border-style: none none solid none;
+}
+
+.summernote-form {
+    width: 70%;
+}
+
+.create-post {
+    width: 130px;
+    font-size: 20px;
+    height: 40px;
+    margin-bottom: 30px;
+}
+
+.page-title {
+    font-size: 40px;
+    font-weight: 400;
 }

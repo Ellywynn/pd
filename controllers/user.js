@@ -171,11 +171,14 @@ class User {
                 // посты, сделанные пользователем
                 const q = ` SELECT p.post_id, p.title, u.nickname AS author,
                             DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
-                            COUNT(l.post_id) AS likes
-                            FROM post AS p INNER JOIN user AS u ON p.user_id = u.user_id
+                            u.avatar_path AS avatar_path,
+                            COUNT(l.post_id) AS likes, COUNT(c.post_id) AS comments
+                            FROM post AS p
+                            INNER JOIN user AS u ON p.user_id = u.user_id
                             LEFT JOIN post_like AS l ON l.post_id = p.post_id
+                            LEFT JOIN comment AS c ON c.post_id = p.post_id
                             WHERE p.user_id = ${user_id}
-                            GROUP BY p.post_id, p.title, author, last_update`;
+                            GROUP BY p.post_id, p.title, author, last_update, avatar_path`;
                 result = await db.query(q);
 
                 posts = result[0];

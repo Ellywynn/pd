@@ -7,23 +7,29 @@
   <%- include('layouts/navbar'); -%>
   
   <div class="container">
-      <h1>Главная</h1>
       <% if(loggedIn && role && nickname) { %>
-        <h2>Добрый день, <%= nickname %>!</h2>
-        <button class="test">click</button>
+        <h1 class="page-title">Лента</h1>
       <% } else { %>
-        <h2>Войдите</h2>
+        <h1 class="page-title">Войдите, чтобы стать частью PolyView!</h1>
       <% } %>
 
       <div class="posts">
         <% for(let i = 0; i < posts.length; i++) { %>
           <div class="post">
-            <h2><a href="/post/<%= posts[i].post_id %>"><%= posts[i].title %></a></h2>
-            <small>by <a href="/user/<%= posts[i].author %>"><%= posts[i].author %></a> <%= posts[i].last_update %></small>
-            <div class="post-info">
-              <span><i class="fa fa-heart"></i> <%= posts[i].likes %></span>
-              <span><i class="fa fa-heart"></i> <%= posts[i].comments %></span>
-            </div>
+              <div class="author-date">
+                  <a href="/user/<%= posts[i].author %>" class="post-avatar">
+                    <img src="<%= posts[i].avatar_path %>" alt="">
+                  </a>
+                  <div>
+                      <a class="post-author" href="/user/<%= posts[i].author %>"><%= posts[i].author %></a>
+                      <p class="post-time"><%= posts[i].last_update %></p>
+                  </div>
+              </div>
+              <a class="post-title" href="/post/<%= posts[i].post_id %>"><%= posts[i].title %></a>
+              <div class="likes-comments">
+                  <p class="post-likes"><i class="fa fa-heart"></i> <%= posts[i].likes %></p>
+                  <p class="post-comments"><i class="fa fa-comment"></i> <%= posts[i].comments %></p>
+              </div>
           </div>
         <% } %>
       </div>

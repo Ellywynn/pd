@@ -6,18 +6,10 @@
 <body>
   <%- include('layouts/navbar'); -%>
   
-  <div class="container">
+    <main class="container">
       <div class="user-info">
         <div class="main-info">
             <img class="user-avatar" src="<%= avatar_path %>" alt="<%= user %>">
-
-            <% if(nickname == user) { %>
-                <form action="/user/avatar" method="post" encType="multipart/form-data">
-                    <label id="avatar-lable" for="avatar">Изменить аватар:</label>
-                    <input type="file" accept=".jpg, .jpeg, .png" name="avatar" id="avatar-upload">
-                    <button type="submit">Изменить</button>
-                </form>
-            <% } %>
         </div>
         <div class="other-info">
             <h1 class="user-nickname"><%= user %></h1>
@@ -25,29 +17,49 @@
             <p class="post-count">Количество сделанных постов: <%= postCount %></p>
             <p class="liked-count">Количество понравившихся постов: <%= likedCount %></p>
             <p class="comment-count">Количество оставленных комментариев: <%= likedCount %></p>
+            <% if(nickname == user) { %>
+                <form class="change-avatar" action="/user/avatar" method="post" encType="multipart/form-data">
+                    <label for="avatar">Изменить аватар:</label>
+                    <input type="file" accept=".jpg, .jpeg, .png" name="avatar" id="avatar-upload">
+                    <button type="submit">Изменить</button>
+                </form>
+            <% } %>
         </div>
       </div>
         
         <div class="user-posts">
             <% if(posts.length > 0) { %>
                 <% if(nickname == user) { %>
-                    <p>Ваши посты:</p>
+                    <p class="user-info">Ваши посты:</p>
                 <% } else { %>
-                    <p>Посты пользователя <%= user %>:</p>
+                    <p class="user-info">Посты пользователя <%= user %>:</p>
                 <% } %>
 
                 <div class="posts">
                     <% for(let i = 0; i < posts.length; i++) { %>
                         <div class="post">
-                            <a href="/post/<%= posts[i].post_id %>"><%= posts[i].title %> <%= posts[i].last_update %></a>
+                            <div class="author-date">
+                                <a href="/user/<%= posts[i].author %>" class="post-avatar">
+                                    <img src="/users/<%= posts[i].avatar_path %>" alt="">
+                                </a>
+                                <div>
+                                    <a class="post-author" href="/user/<%= posts[i].author %>"><%= posts[i].author %></a>
+                                    <p class="post-time"><%= posts[i].last_update %></p>
+                                </div>
+                            </div>
+                            <a class="post-title" href="/post/<%= posts[i].post_id %>"><%= posts[i].title %></a>
+                            <div class="likes-comments">
+                                <p class="post-likes"><i class="fa fa-heart"></i> <%= posts[i].likes %></p>
+                                <p class="post-comments"><i class="fa fa-comment"></i> <%= posts[i].comments %></p>
+                            </div>
                         </div>
                     <% } %>
                 </div>
             <% } else { %>
                 <% if(nickname == user) { %>
-                    <p>Вы еще не сделали никакой записи</p>
+                    <p class="user-info">Вы еще не сделали никакой записи</p>
                 <% } else { %>
-                    <p>Пользователь <%= user %> еще не сделал никакой записи</p>
+                    <p class="user-info">Пользователь <%= user %> еще не сделал никакой записи</p>
                 <% } %>
             <% } %>
 
@@ -55,24 +67,35 @@
             <div class="liked-posts">
             <% if(liked.length > 0) { %>
                 <% if(nickname == user) { %>
-                    <p>Посты, которые вам понравились:</p>
+                    <p class="user-info">Посты, которые вам понравились:</p>
                 <% } else { %>
-                    <p>Посты, которые понравились <span><%= user %></span>:</p>
+                    <p class="user-info">Посты, которые понравились <span><%= user %></span>:</p>
                 <% } %>
                     <% for(let i = 0; i < liked.length; i++) { %>
                         <div class="post">
-                            <a href="/post/<%= liked[i].post_id %>"><%= liked[i].title %> <%= liked[i].last_update %></a>
+                            <div class="author-date">
+                                <img class="post-avatar" src="/users/<%= liked[i].avatar_path %>" alt="">
+                                <div>
+                                    <a class="post-author" href="/user/<%= liked[i].author %>"><%= liked[i].author %></a>
+                                    <p class="post-time"><%= liked[i].last_update %></p>
+                                </div>
+                            </div>
+                            <a class="post-title" href="/post/<%= liked[i].post_id %>"><%= liked[i].title %></a>
+                            <div class="likes-comments">
+                                <p class="post-likes"><i class="fa fa-heart"></i> <%= liked[i].likes %></p>
+                                <p class="post-comments"><i class="fa fa-comment"></i> <%= liked[i].comments %></p>
+                            </div>
                         </div>
                     <% } %>
             <% } else { %>
                 <% if(nickname == user) { %>
-                    <p>Вы еще не оценили никаких постов</p>
+                    <p class="user-info">Вы еще не оценили никаких постов</p>
                 <% } else { %>
-                    <p>Пользователь <span><%= user %></span> еще не оценил никаких постов</p>
+                    <p class="user-info">Пользователь <%= user %> еще не оценил никаких постов</p>
                 <% } %>
             <% } %>
             </div>
         </div>
-  </div>
+    </main>
 </body>
 </html>

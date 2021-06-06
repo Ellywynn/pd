@@ -6,30 +6,28 @@
 <body>
   <%- include('layouts/navbar'); -%>
   
-  <div class="container">
-    <form method="post" action="
+    <form class="summernote-form" method="post" action="
       <% if(locals.postContent && locals.postTitle && locals.post_id) { %>
         /post/edit/<%= post_id %>
       <% } else { %>
         /post/add
       <% } %>
     ">
-      <input type="text" name="title"
+      <input class="new-post-title" type="text" name="title"
         placeholder="Заголовок..."
         required
         value=<% if(locals.postTitle) { %>
           <%= postTitle %>
-        <% } %>> <br> <br>
-      <textarea maxlength="65535" required id="summernote" name="editordata">
+        <% } %>>
+      <textarea class="new-post-content" maxlength="65535"
+       required id="summernote" name="editordata">
         <% if(locals.postContent) { %>
           <%- postContent %>
         <% } %>
       </textarea>
-      <button type="submit">Сохранить</button>
+      <button class="create-post" type="submit">Сохранить</button>
     </form>
-  </div>
 
-  <%- include('layouts/footer'); -%>
   <script src="/js/editPost.js"></script>
 </body>
 </html>

@@ -7,6 +7,7 @@ class IndexController {
             // информация о посте
             const q = `
             SELECT p.post_id, p.title, u.nickname AS author, p.content,
+            u.avatar_path AS avatar_path,
             DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
             COUNT(l.post_id) AS likes, COUNT(c.user_id) AS comments
             FROM post AS p 
@@ -27,10 +28,19 @@ class IndexController {
                 const last_update = result[0][i].last_update;
                 const comments = result[0][i].comments;
 
+                let avatar_path = result[0][i].avatar_path;
+
+                if(avatar_path !== 'default.png') {
+                    avatar_path = '/users/' + avatar_path;
+                } else {
+                    avatar_path = '/' + avatar_path;
+                }
+
                 const post = {
                     post_id,
                     title,
                     author,
+                    avatar_path,
                     content,
                     likes,
                     comments,

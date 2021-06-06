@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `post` (
     post_id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(150) NOT NULL,
     user_id INT NOT NULL,
-    content VARCHAR(65535) NOT NULL, -- post content (stored like innerHTML)
+    content TEXT NOT NULL, -- post content (stored like innerHTML)
     last_update DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY(post_id),

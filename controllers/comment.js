@@ -25,7 +25,7 @@ class Comment {
             const user_id = loggedIn;
             await db.query(`INSERT INTO comment_like(user_id, comment_id)
                 VALUES(${user_id}, ${comment_id})`);
-            res.sendStatus(200);
+            return res.sendStatus(200);
         } catch (error) {
             console.error(error);
         }
@@ -36,7 +36,7 @@ class Comment {
             const user_id = loggedIn;
             await db.query(`DELETE from comment_like
              WHERE user_id = ${user_id} AND comment_id = ${comment_id}`);
-            res.sendStatus(200);
+            return res.sendStatus(200);
         } catch (error) {
             console.error(error);
         }
@@ -45,7 +45,7 @@ class Comment {
         try {
             const comment_id = req.params.comment_id;
             await db.query(`DELETE FROM comment WHERE comment_id = ${comment_id}`);
-            res.sendStatus(200);
+            return res.sendStatus(200);
         } catch (error) {
             console.error(error);
         }

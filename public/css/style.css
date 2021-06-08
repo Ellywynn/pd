@@ -347,9 +347,16 @@ button.post-likes {
     transition: 0.3s all ease;
 }
 
-button.post-likes:hover {
+button.liked {
     color: red;
+}
+
+button.post-likes:hover {
     cursor: pointer;
+}
+
+.liked {
+    color: red;
 }
 
 .new-post-title {
@@ -557,4 +564,36 @@ button.comment-likes:hover {
     font-size: 16px;
     margin: 10px;
     visibility: hidden;
+}
+
+.note-editable p, .post-content p {
+    font-size: 20px;
+}
+
+.note-editable h1, .post-content h1 {
+    font-size: 40px;
+}
+
+.note-editable h2, .post-content h2 {
+    font-size: 35px;
+}
+
+.note-editable h3, .post-content h3 {
+    font-size: 30px;
+}
+
+.note-editable h4, .post-content h4 {
+    font-size: 28px;
+}
+
+.note-editable h5, .post-content h5 {
+    font-size: 25px;
+}
+
+.note-editable h6, .post-content h6 {
+    font-size: 22px;
+}
+
+.liked {
+    color: #fff;
 }

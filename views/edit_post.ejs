@@ -19,7 +19,7 @@
       value=<% if(locals.postTitle) { %>
         <%= postTitle %>
       <% } %>>
-    <textarea class="new-post-content" maxlength="65535"
+    <textarea class="new-post-content"
         id="summernote" name="editordata"><% if(locals.postContent) { %><%- postContent %><% } %></textarea>
     <button class="create-post" type="submit">Сохранить</button>
   </form>

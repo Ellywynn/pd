@@ -23,7 +23,7 @@
         <%- content %>
       </div>
       <div class="likes-comments">
-        <button class="post-likes"><i class="fa fa-heart"></i> <%= likes %></button>
+        <button class="post-likes <% if(liked) { %> <%= 'liked' %> <% } %>"><i class="fa fa-heart"></i> <%= likes %></button>
         <p class="post-comments"><i class="fa fa-comment"></i> <%= commentCount %></p>
       </div>
     </div>
@@ -32,7 +32,7 @@
       <% if(comments.length > 0) { %>
         <p class="comments-info">Найдено <%= comments.length %> комментариев</p>
         <% for(let i = 0; i < comments.length; i++) { %>
-          <div class="comment">
+          <div data-id="<%= comments[i].comment_id %>" class="comment">
             <div class="author-date">
               <a href="/user/<%= comments[i].author %>" class="comment-avatar">
                 <img src="<%= comments[i].avatar_path %>" alt="">
@@ -44,7 +44,7 @@
             </div>
             <p class="comment-content"><%= comments[i].content %></p>
             <div class="likes-comments">
-                <button class="comment-likes"><i class="fa fa-heart"></i> <%= comments[i].likes %></button>
+                <button data-id="<%= comments[i].comment_id %>" class="comment-likes <% if(comments[i].liked) { %> <%= 'liked' %> <% } %>"><i class="fa fa-heart"></i> <%= comments[i].likes %></button>
             </div>
           </div>
         <% } %>

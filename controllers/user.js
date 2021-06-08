@@ -136,16 +136,17 @@ class User {
                 const regTime = result[0][0].regtime;
                 let avatar_path = result[0][0].avatar_path;
 
-                if(avatar_path !== 'default.png') {
-                    avatar_path = '/users/' + avatar_path;
-                } else {
-                    avatar_path = '/' + avatar_path;
-                }
+                avatar_path = validateAvatar(avatar_path);
 
+                // id понравившихся постов
+                let q = `SELECT COUNT(post_id) AS liked, post_id
+                         FROM post_like
+                         WHERE user_id = ${user_id}
+                         GROUP BY post_id`;
                 let liked = [];
                 let posts = [];
-                // id понравившихся постов
-                result = await db.query(`SELECT COUNT(post_id) AS liked FROM post_like WHERE user_id = ${user_id}`);
+                
+                result = await db.query(q);
 
                 const likedCount = result[0][0].liked;
 
@@ -158,19 +159,24 @@ class User {
 
                     // посты, которые понравились юзеру
                     result = await db.query(
-                        `SELECT p.post_id, p.title, 
-                        DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
-                        COUNT(pl.post_id) AS likes
+                        `SELECT p.post_id, p.title, u.nickname AS author, p.content,
+                        DATE_FORMAT(p.last_update, '%d-%m-%Y в %H:%i:%s') AS last_update,
+                        u.avatar_path AS avatar_path,
+                        COUNT(l.post_id) AS likes,
+                        COUNT(c.user_id) AS comments
                         FROM post AS p 
-                        LEFT JOIN post_like AS pl ON pl.post_id = p.post_id 
+                        LEFT JOIN user AS u ON p.user_id = u.user_id
+                        LEFT JOIN post_like AS l ON p.post_id = l.post_id
+                        LEFT JOIN comment AS c ON p.post_id = c.post_id
                         WHERE p.post_id IN (${post_ids.join()})
-                        GROUP BY p.post_id, p.title, last_update`);
+                        GROUP BY p.title, p.post_id, author, p.content, last_update, avatar_path`);
 
                     liked = result[0];
+                    liked.map(post => post.avatar_path = validateAvatar(post.avatar_path));
                 }
 
                 // посты, сделанные пользователем
-                const q = ` SELECT p.post_id, p.title, u.nickname AS author,
+                q = ` SELECT p.post_id, p.title, u.nickname AS author,
                             DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
                             u.avatar_path AS avatar_path,
                             COUNT(l.post_id) AS likes, COUNT(c.post_id) AS comments
@@ -183,6 +189,8 @@ class User {
                 result = await db.query(q);
 
                 posts = result[0];
+
+                posts.map(post => post.avatar_path = validateAvatar(post.avatar_path));
 
                 const postCount = posts.length;
 
@@ -219,10 +227,10 @@ class User {
             return res.render('notfound', {
                 message: 'Можно загружать только файлы формата .png, .jpeg, .jpg'
             });
-            // если размер файла больше 1мб или меньше 4кб
-        } else if(avatar.size > 1024 * 1024 || avatar.size < 1024 * 4) {
+            // если размер файла больше 2мб или меньше 4кб
+        } else if(avatar.size > 1024 * 1024 * 2 || avatar.size < 1024 * 4) {
             return res.render('notfound', {
-                message: 'Размер файла слишком большой или слишком маленький(от 4кб до 1мб)'
+                message: 'Размер файла слишком большой или слишком маленький(от 4кб до 2мб)'
             });
         } else {
             try {
@@ -260,6 +268,13 @@ function invalidLogin(res, email, password) {
           password,
           errors
       });
+}
+
+function validateAvatar(avatar_path) {
+    if(avatar_path !== 'default.png') 
+        return '/users/' + avatar_path;
+
+    return '/' + avatar_path;
 }
 
 module.exports = new User();

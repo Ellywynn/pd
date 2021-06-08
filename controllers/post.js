@@ -40,10 +40,11 @@ class Post {
         let result = await db.query(q);
 
         if(result[0].length > 0) {
-            const post = getPosts(result);
+            let post = await getPosts(result);
+            post = post[0];
 
-            const q =
-                  `SELECT c.content,
+            let q =
+                  `SELECT c.comment_id, c.content,
                    DATE_FORMAT(c.last_update, '%d-%m-%Y в %H:%i:%s') AS last_update,
                    u.nickname AS author, u.avatar_path AS avatar_path,
                    COUNT(cl.user_id) AS likes
@@ -55,24 +56,22 @@ class Post {
             result = await db.query(q);
             let comments = result[0];
 
-            for(let i = 0; i < comments.length; i++) {
-                if(comments[i].avatar_path !== 'default.png') {
-                    comments[i].avatar_path = '/users/' + comments[i].avatar_path;
-                } else {
-                    comments[i].avatar_path = '/' + comments[i].avatar_path;
-                }
-            }
+            comments.map(async comment => { 
+                comment.avatar_path = validateAvatar(comment.avatar_path);
+                comment.isLiked = await isCommentLiked(comment.comment_id);
+            });
 
             res.render('post', {
-                post_id: post[0].post_id,
-                title: post[0].title,
-                author: post[0].author,
-                content: post[0].content,
-                likes: post[0].likes,
-                avatar_path: post[0].avatar_path,
-                last_update: post[0].last_update,
+                post_id: post.post_id,
+                title: post.title,
+                author: post.author,
+                content: post.content,
+                likes: post.likes,
+                liked: post.liked,
+                avatar_path: post.avatar_path,
+                last_update: post.last_update,
                 commentCount: comments.length,
-                comments
+                comments,
             });
         } else {
             return res.render('notfound', {
@@ -95,7 +94,7 @@ class Post {
 
         let result = await db.query(q);
 
-        const posts = getPosts(result);
+        const posts = await getPosts(result);
 
         return res.json(posts);
     }
@@ -157,7 +156,7 @@ class Post {
     }
 }
 
-function getPosts(result) {
+async function getPosts(result) {
     let posts = [];
     for(let i = 0; i < result[0].length; i++) {
         const post_id = result[0][i].post_id;
@@ -170,11 +169,9 @@ function getPosts(result) {
 
         let avatar_path = result[0][i].avatar_path;
 
-        if(avatar_path !== 'default.png') {
-            avatar_path = '/users/' + avatar_path;
-        } else {
-            avatar_path = '/' + avatar_path;
-        }
+        avatar_path = validateAvatar(avatar_path);
+
+        const liked = await isPostLiked(post_id);
 
         const post = {
             post_id,
@@ -184,12 +181,44 @@ function getPosts(result) {
             content,
             likes,
             comments,
-            last_update
+            last_update,
+            liked
         };
         posts.push(post);
     }
 
     return posts;
+}
+
+function validateAvatar(avatar_path) {
+    if(avatar_path !== 'default.png') 
+        return '/users/' + avatar_path;
+
+    return '/' + avatar_path;
+}
+
+// лайкнут ли комментарий пользователем
+async function isCommentLiked(comment_id) {
+    if(!loggedIn) return 0;
+
+    q = `SELECT COUNT(comment_id) AS liked
+            FROM comment_like
+            WHERE comment_id = ${comment_id} AND user_id = ${loggedIn}`;
+    const liked = await db.query(q);
+
+    return liked[0][0].liked;
+}
+
+// лайкнут ли пост пользователем
+async function isPostLiked(post_id) {
+    if(!loggedIn) return 0;
+
+    q = `SELECT COUNT(post_id) AS liked
+            FROM post_like
+            WHERE post_id = ${post_id} AND user_id = ${loggedIn}`;
+    const liked = await db.query(q);
+
+    return liked[0][0].liked;
 }
 
 module.exports = new Post();

@@ -1,6 +1,7 @@
 $posts = $('.posts');
 
 $(document).ready(() => {
+    // поиск
     $('#search-input').bind('input', function() {
         $.ajax({
             type: 'GET',
@@ -24,19 +25,19 @@ $(document).ready(() => {
 function appendLoadedPosts(posts) {
     clearPosts();
     posts.map(post => {
-        const postTemplate = 
-            '<div class="post">' +
-            '<div class="author-date">' +
-            '<a href="/user/{{author}}" class="post-avatar">' +
-            '<img src="{{avatar_path}}" alt=""></a>' +
-            '<div><a class="post-author" href="/user/{{author}}">{{author}}</a>' +
-            '<p class="post-time">{{last_update}}</p></div>' +
-            '</div>' +
-            '<a class="post-title" href="/post/{{post_id}}">{{title}}</a>' +
-            '<div class="likes-comments"><p class="post-likes">' +
-            '<i class="fa fa-heart"></i>{{likes}}</p>' +
-            '<p class="post-comments"><i class="fa fa-comment"></i>{{comments}}</p></div></div>';
-        $posts.append(Mustache.render(postTemplate, post));
+    const postTemplate = 
+        '<div class="post">' +
+        '<div class="author-date">' +
+        '<a href="/user/{{author}}" class="post-avatar">' +
+        '<img src="{{avatar_path}}" alt=""></a>' +
+        '<div><a class="post-author" href="/user/{{author}}">{{author}}</a>' +
+        '<p class="post-time">{{last_update}}</p></div>' +
+        '</div>' +
+        '<a class="post-title" href="/post/{{post_id}}">{{title}}</a>' +
+        '<div class="likes-comments"><p class="post-likes">' +
+        '<i class="fa fa-heart"></i>{{likes}}</p>' +
+        '<p class="post-comments"><i class="fa fa-comment"></i>{{comments}}</p></div></div>';
+    $posts.append(Mustache.render(postTemplate, post));
     });
     found();
 }

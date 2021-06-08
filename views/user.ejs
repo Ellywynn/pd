@@ -40,10 +40,10 @@
 
                 <div class="posts">
                     <% for(let i = 0; i < posts.length; i++) { %>
-                        <div class="post">
+                        <div data-id="<%= posts[i].post_id %>" class="post">
                             <div class="author-date">
                                 <a href="/user/<%= posts[i].author %>" class="post-avatar">
-                                    <img src="/users/<%= posts[i].avatar_path %>" alt="">
+                                    <img src="<%= posts[i].avatar_path %>" alt="">
                                 </a>
                                 <div>
                                     <a class="post-author" href="/user/<%= posts[i].author %>"><%= posts[i].author %></a>
@@ -66,18 +66,20 @@
                 <% } %>
             <% } %>
 
-            <!-- если это профиль текущего пользователя -->
             <div class="liked-posts">
             <% if(liked.length > 0) { %>
                 <% if(nickname == user) { %>
                     <p class="user-info">Посты, которые вам понравились:</p>
                 <% } else { %>
-                    <p class="user-info">Посты, которые понравились <span><%= user %></span>:</p>
+                    <p class="user-info">Посты, которые понравились <%= user %>:</p>
                 <% } %>
-                    <% for(let i = 0; i < liked.length; i++) { %>
-                        <div class="post">
+                <% for(let i = 0; i < liked.length; i++) { %>
+                    <div class="posts">
+                        <div data-id="<%= liked[i].post_id %>" class="post">
                             <div class="author-date">
-                                <img class="post-avatar" src="/users/<%= liked[i].avatar_path %>" alt="">
+                                <a href="/user/<%= liked[i].author %>" class="post-avatar">
+                                    <img src="<%= liked[i].avatar_path %>" alt="">
+                                </a>
                                 <div>
                                     <a class="post-author" href="/user/<%= liked[i].author %>"><%= liked[i].author %></a>
                                     <p class="post-time"><%= liked[i].last_update %></p>
@@ -89,7 +91,8 @@
                                 <p class="post-comments"><i class="fa fa-comment"></i> <%= liked[i].comments %></p>
                             </div>
                         </div>
-                    <% } %>
+                    </div>
+                <% } %>
             <% } else { %>
                 <% if(nickname == user) { %>
                     <p class="user-info">Вы еще не оценили никаких постов</p>

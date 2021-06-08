@@ -13,6 +13,13 @@
         <h1 class="page-title">Войдите, чтобы стать частью PolyView!</h1>
       <% } %>
 
+      <div id="search-bar">
+        <i id="search-icon" class="fa fa-search"></i>
+        <input id="search-input" type="text" placeholder="Поиск по автору или названию поста..">
+      </div>
+
+      <p id="not-found">Нет результатов поиска</p>
+
       <div class="posts">
         <% for(let i = 0; i < posts.length; i++) { %>
           <div class="post">
@@ -35,18 +42,7 @@
       </div>
   </div>
 
-  <script>
-    $(document).ready(() => {
-      $('.test').on('click', (e) => {
-        e.stopPropagation();
-        $.ajax({
-          type: 'POST',
-          url: '/comment/like/1',
-          success: () => alert('done!'),
-          error: () => alert('error :(')
-        });
-      })
-    });
-  </script>
+  <script src="/js/index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.js"></script>
 </body>
 </html>

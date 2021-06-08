@@ -70,13 +70,13 @@ header nav li a {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 1rem;
     color: #000;
     font-size: 20px;
     outline: none;
     text-decoration: none;
     width: 100%;
     height: 100%;
+    padding: 0 1rem;
 }
 
 header nav li a:-webkit-any-link {
@@ -108,6 +108,7 @@ header nav li a:-webkit-any-link {
     align-items: center;
     flex-direction: column;
     padding-bottom: 60px;
+    height: auto;
 }
 
 .login-title {
@@ -257,7 +258,8 @@ label {
 .post {
     width: 80%;
     max-width: 1200px;
-    height: 150px;
+    min-height: 150px;
+    height: auto;
     display: flex;
     flex-direction: column;
     margin: 10px 20px;
@@ -279,9 +281,17 @@ label {
 }
 
 .post-title {
-    text-decoration: none;
-    color: #000;
+    text-align: center;
+    text-decoration: none;  
+    color: rgb(10, 10, 10);
     font-size: 40px;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.posts .post-title:hover {
+    background-color: rgba(0,0,0,0.15);
+    color: #000;
 }
 
 .post-avatar {
@@ -317,7 +327,7 @@ label {
     margin-top: 10px;
     width: 100%;
     display: flex;
-    font-size: 16px;
+    font-size: 20px;
 }
 
 .likes-comments .post-likes{
@@ -329,7 +339,7 @@ label {
 }
 
 button.post-likes {
-    font-size: 16px;
+    font-size: 20px;
     border: none;
     outline: none;
     color: #111;
@@ -446,6 +456,7 @@ body.single-post {
     text-decoration: none;
     color: #000;
     font-size: 20px;
+    padding: 15px;
 }
 
 .comment-author {
@@ -463,7 +474,7 @@ body.single-post {
 }
 
 button.comment-likes {
-    font-size: 14px;
+    font-size: 18px;
     border: none;
     outline: none;
     color: #111;
@@ -494,7 +505,7 @@ button.comment-likes:hover {
 }
 
 .comment-form textarea {
-    width: 100%;
+    width: 80%;
     height: 80px;
     padding: 10px;
     resize: none;
@@ -505,7 +516,7 @@ button.comment-likes:hover {
 }
 
 .comment-form div {
-    width: 100%;
+    width: 80%;
     height: auto;
     display: flex;
 }
@@ -514,4 +525,36 @@ button.comment-likes:hover {
     width: 100px;
     height: 25px;
     font-size: 14px;
+}
+
+#search-bar {
+    width: 70%;
+    height: auto;
+    margin-top: 15px;
+    display: flex;
+}
+
+#search-input {
+    width: 95%;   
+    height: 40px;
+    font-size: 20px;
+    padding: 0 15px 0 15px;
+    outline: none;
+    border: none;
+}
+
+#search-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    background-color: #fff;
+    width: 5%;
+    height: 100%;
+}
+
+#not-found {
+    font-size: 16px;
+    margin: 10px;
+    visibility: hidden;
 }

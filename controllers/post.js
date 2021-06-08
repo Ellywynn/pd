@@ -40,20 +40,7 @@ class Post {
         let result = await db.query(q);
 
         if(result[0].length > 0) {
-            const post_id = result[0][0].post_id;
-            const title = result[0][0].title;
-            const author = result[0][0].author;
-            const content = result[0][0].content;
-            const likes = result[0][0].likes;
-            const commentCount = result[0][0].comments;
-            const last_update = result[0][0].last_update;
-            let avatar_path = result[0][0].avatar_path;
-
-            if(avatar_path !== 'default.png') {
-                avatar_path = '/users/' + avatar_path;
-            } else {
-                avatar_path = '/' + avatar_path;
-            }
+            const post = getPosts(result);
 
             const q =
                   `SELECT c.content,
@@ -77,21 +64,40 @@ class Post {
             }
 
             res.render('post', {
-                post_id,
-                title,
-                author,
-                content,
-                likes,
-                commentCount,
-                avatar_path,
-                comments,
-                last_update
+                post_id: post[0].post_id,
+                title: post[0].title,
+                author: post[0].author,
+                content: post[0].content,
+                likes: post[0].likes,
+                avatar_path: post[0].avatar_path,
+                last_update: post[0].last_update,
+                commentCount: comments.length,
+                comments
             });
         } else {
             return res.render('notfound', {
                 message: "ERROR #404: Пост не найден"
             });
         }
+    }
+    async getAllPosts(req, res) {
+        const q = ` SELECT p.post_id, p.title, u.nickname AS author, p.content,
+                    DATE_FORMAT(p.last_update, '%d-%m-%Y в %H:%i:%s') AS last_update,
+                    u.avatar_path AS avatar_path,
+                    COUNT(l.post_id) AS likes,
+                    COUNT(c.user_id) AS comments
+                    FROM post AS p 
+                    LEFT JOIN user AS u ON p.user_id = u.user_id
+                    LEFT JOIN post_like AS l ON p.post_id = l.post_id
+                    LEFT JOIN comment AS c ON p.post_id = c.post_id
+                    GROUP BY p.title, p.post_id, author, p.content, last_update, avatar_path
+                    ORDER BY last_update DESC`;
+
+        let result = await db.query(q);
+
+        const posts = getPosts(result);
+
+        return res.json(posts);
     }
     async editPost(req, res) {
         const post_id = req.params.post_id;
@@ -149,6 +155,41 @@ class Post {
             res.redirect('/');
         }
     }
+}
+
+function getPosts(result) {
+    let posts = [];
+    for(let i = 0; i < result[0].length; i++) {
+        const post_id = result[0][i].post_id;
+        const title = result[0][i].title;
+        const author = result[0][i].author;
+        const content = result[0][i].content;
+        const likes = result[0][i].likes;
+        const last_update = result[0][i].last_update;
+        const comments = result[0][i].comments;
+
+        let avatar_path = result[0][i].avatar_path;
+
+        if(avatar_path !== 'default.png') {
+            avatar_path = '/users/' + avatar_path;
+        } else {
+            avatar_path = '/' + avatar_path;
+        }
+
+        const post = {
+            post_id,
+            title,
+            author,
+            avatar_path,
+            content,
+            likes,
+            comments,
+            last_update
+        };
+        posts.push(post);
+    }
+
+    return posts;
 }
 
 module.exports = new Post();

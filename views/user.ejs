@@ -21,6 +21,9 @@
                 <form class="change-avatar" action="/user/avatar" method="post" encType="multipart/form-data">
                     <label for="avatar">Изменить аватар:</label>
                     <input type="file" accept=".jpg, .jpeg, .png" name="avatar" id="avatar-upload">
+                    <% if(locals.fileError) { %>
+                        <span class="error"><%= fileError %>></span>
+                    <% } %>
                     <button type="submit">Изменить</button>
                 </form>
             <% } %>

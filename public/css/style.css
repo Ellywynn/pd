@@ -30,13 +30,17 @@ header {
     height: 70px;
     justify-content: space-between;
     align-items: center;
-    /* padding: 1rem 6rem; */
     background-color: #fff;
+}
+
+header nav {
+    height: 70px;
 }
 
 header .site-icon {
     width: 40px;
     height: 70px;
+    margin-left: 10%;
 }
 
 header .site-icon img {
@@ -48,22 +52,6 @@ header nav ul {
     display: flex;
     list-style: none;
     height: 70px;
-}
-
-.errors {
-    margin-bottom: 15px;
-    width: 30%;
-}
-
-.error {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 2px;
-    font-size: 20px;
-    color: red;
-    border: 2px solid red;
 }
 
 header nav li {
@@ -95,6 +83,22 @@ header nav li a:-webkit-any-link {
     color: #000;
     cursor: pointer;
     text-decoration: none;
+}
+
+.errors {
+    margin-bottom: 15px;
+    width: 30%;
+}
+
+.error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 2px;
+    font-size: 20px;
+    color: red;
+    border: 2px solid red;
 }
 
 .container {
@@ -196,6 +200,14 @@ label {
 
 .change-avatar input {
     font-size: 18px;
+}
+
+.change-avatar .error {
+    display: block;
+    border: none;
+    font-size: 14px;
+    width: auto;
+    margin: 3px 0;
 }
 
 .change-avatar button {
@@ -305,6 +317,7 @@ label {
     margin-top: 10px;
     width: 100%;
     display: flex;
+    font-size: 16px;
 }
 
 .likes-comments .post-likes{
@@ -316,7 +329,7 @@ label {
 }
 
 button.post-likes {
-    font-size: 14px;
+    font-size: 16px;
     border: none;
     outline: none;
     color: #111;
@@ -335,7 +348,13 @@ button.post-likes:hover {
     font-size: 20px;
     margin-bottom: 1.5rem;
     padding: 0 10px;
-    border-style: none none solid none;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+
+#summernote {
+    border-radius: 5px;
 }
 
 .summernote-form {
@@ -355,7 +374,7 @@ button.post-likes:hover {
 }
 
 body.single-post {
-
+    height: auto;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
@@ -393,6 +412,7 @@ body.single-post {
     justify-content: center;
     width: 100%;
     margin: 20px 0;
+    height: auto;
 }
 
 .comment {
@@ -462,18 +482,32 @@ button.comment-likes:hover {
 }
 
 .comment-form {
-    width: 100%;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    width: 80%;
     max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
 .comment-form textarea {
     width: 100%;
-    max-width: 500px;
     height: 80px;
     padding: 10px;
     resize: none;
     border-radius: 10px;
     outline: none;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.comment-form div {
+    width: 100%;
+    height: auto;
+    display: flex;
 }
 
 .comment-form button {

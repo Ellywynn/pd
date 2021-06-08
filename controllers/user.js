@@ -1,6 +1,7 @@
 const db = require('../config/database');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const sharp = require('sharp');
 
 // round count for generating salt
 const roundCount = 11;
@@ -206,22 +207,38 @@ class User {
 
     async uploadImage(req, res, next) {
         const avatar = req.files.avatar;
+
+        if(!avatar) {
+            return res.render('notfound', {
+                message: 'Ошибка загрузки файла'
+            });
+        }
+
         // если файл неправильного формата
         if(avatar.mimetype !== 'image/png' && avatar.mimetype !== 'image/jpeg') {
             return res.render('notfound', {
                 message: 'Можно загружать только файлы формата .png, .jpeg, .jpg'
             });
-            // если размер файла больше двух мегабайт
-        } else if(avatar.size > 2097152) {
+            // если размер файла больше 1мб или меньше 4кб
+        } else if(avatar.size > 1024 * 1024 || avatar.size < 1024 * 4) {
             return res.render('notfound', {
-                message: 'Размер файла слишком большой'
+                message: 'Размер файла слишком большой или слишком маленький(от 4кб до 1мб)'
             });
         } else {
             try {
                 // если файл удовлетворяет требованиям
-                const filename = nickname + '.' + avatar.mimetype.split('/')[1];
-                avatar.mv(path.resolve(__dirname, '..', 'public', 'users', filename));
+                // обрезать фотографию
+                const filename = nickname + '.jpeg';
+                const filepath = path.resolve(__dirname, '..', 'public', 'users', filename);
 
+                // обрезать фотографию и сохранить ее
+                await sharp(avatar.data)
+                    .resize(200, 200)
+                    .toFormat('jpeg')
+                    .jpeg({quality: 90})
+                    .toFile(filepath);
+
+                // обновить информацию о новой фотографии
                 const q = `UPDATE user SET avatar_path = '${filename}' WHERE nickname = '${nickname}'`;
                 await db.query(q);
 

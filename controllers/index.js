@@ -8,7 +8,7 @@ class IndexController {
             const q = `
             SELECT p.post_id, p.title, u.nickname AS author, p.content,
             u.avatar_path AS avatar_path,
-            DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
+            DATE_FORMAT(p.last_update, '%d-%m-%Y в %H:%i:%s') AS last_update,
             COUNT(l.post_id) AS likes, COUNT(c.user_id) AS comments
             FROM post AS p 
             LEFT JOIN user AS u ON p.user_id = u.user_id

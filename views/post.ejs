@@ -3,42 +3,64 @@
 
 <%- include('layouts/head'); -%>
 
-<body>
+<body class="single-post">
   <%- include('layouts/navbar'); -%>
   
-  <div class="container">
-    <div class="post">
-      <h2><%= title %></h2>
-      <p>by <a href="/user/<%= author %>"><%= author %></a> <span><%= last_update %></span></p>
-      <% if(author == nickname) { %>
-        <a href="/post/edit/<%= post_id %>">Изменить</a>
-        <a href="/post/delete/<%= post_id %>">Удалить</a>
-        <br>
-      <% } %>
-      <%- content %>
+    <div class="post single">
+      <div class="author-date">
+          <a href="/user/<%= author %>" class="post-avatar">
+            <img src="<%= avatar_path %>" alt="">
+          </a>
+          <div>
+              <a class="post-author" href="/user/<%= author %>"><%= author %></a>
+              <p class="post-time"><%= last_update %></p>
+          </div>
+      </div>
+      <div class="post-title">
+        <p class="post-title"><%= title %></p>
+      </div>
+      <div class="post-content">
+        <%- content %>
+      </div>
+      <div class="likes-comments">
+        <button class="post-likes"><i class="fa fa-heart"></i> <%= likes %></button>
+        <p class="post-comments"><i class="fa fa-comment"></i> <%= commentCount %></p>
+      </div>
     </div>
-    <div class="info"><i class="fa fa-heart"></i> <%= likes %></div>
+
     <div class="comments">
       <% if(comments.length > 0) { %>
-        <p>Найдено <%= comments.length %> комментариев</p>
+        <p class="comments-info">Найдено <%= comments.length %> комментариев</p>
         <% for(let i = 0; i < comments.length; i++) { %>
-          <div class="post">
-            <p><%= comments[i].author %>: <%= comments[i].content %> // <%= comments[i].last_update %></p>
-            <button class="like-btn"><i class="fa fa-heart"></i> <%= comments[i].likes %></button>
+          <div class="comment">
+            <div class="author-date">
+              <a href="/user/<%= comments[i].author %>" class="comment-avatar">
+                <img src="<%= comments[i].avatar_path %>" alt="">
+              </a>
+              <div>
+                  <a class="comment-author" href="/user/<%= comments[i].author %>"><%= comments[i].author %></a>
+                  <p class="comment-time"><%= comments[i].last_update %></p>
+              </div>
+            </div>
+            <p class="comment-content"><%= comments[i].content %></p>
+            <div class="likes-comments">
+                <button class="comment-likes"><i class="fa fa-heart"></i> <%= comments[i].likes %></button>
+            </div>
           </div>
         <% } %>
       <% } else { %>
-        <p>Никто еще не комментировал эту запись</p>
+        <p class="comments-info">Никто еще не комментировал эту запись</p>
       <% } %>
-      <% if(loggedIn) { %>
-        <form action="/comment/<%= post_id %>" method="post">
-          <textarea maxlength="2000" name="comment" rows="10" cols="40" placeholder="Оставить комментарий.."></textarea>
-          <br>
-          <button type="submit">Отправить</button>
-        </form>
-      <% } else { %>
-        <p>Войдите, чтобы оставить комментарий</p>
-      <% } %>
-  </div>
+    </div>
+
+    <% if(loggedIn) { %>
+    <form class="comment-form" action="/comment/<%= post_id %>" method="post">
+      <textarea maxlength="2000" name="comment" placeholder="Оставить комментарий.."></textarea>
+      <br>
+      <button type="submit">Отправить</button>
+    </form>
+    <% } else { %>
+      <p class="comments-info">Войдите, чтобы оставить комментарий</p>
+    <% } %>
 </body>
 </html>

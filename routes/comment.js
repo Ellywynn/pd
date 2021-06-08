@@ -6,6 +6,6 @@ const authMiddleware = require('../middleware/auth');
 router.post('/:post_id', authMiddleware.isLoggedIn, commentController.addComment);
 router.post('/like/:comment_id', authMiddleware.isLoggedIn, commentController.likeComment);
 router.post('/dislike/:comment_id', authMiddleware.isLoggedIn, commentController.dislikeComment);
-router.delete('/:comment_id',  commentController.deleteComment);
+router.delete('/:comment_id', authMiddleware.isLoggedIn,  commentController.deleteComment);
 
 module.exports = router;

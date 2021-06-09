@@ -1,4 +1,5 @@
 const db = require('../config/database');
+const tools = require('../tools/tools');
 
 class Post {
     async createPost(req, res) {
@@ -28,19 +29,17 @@ class Post {
         const q = ` SELECT p.post_id, p.title, u.nickname AS author, p.content,
                     DATE_FORMAT(p.last_update, '%d-%m-%Y в %H:%i:%s') AS last_update,
                     u.avatar_path AS avatar_path,
-                    COUNT(l.post_id) AS likes,
-                    COUNT(c.user_id) AS comments
+                    COUNT(l.user_id) AS likes
                     FROM post AS p 
                     LEFT JOIN user AS u ON p.user_id = u.user_id
                     LEFT JOIN post_like AS l ON p.post_id = l.post_id
-                    LEFT JOIN comment AS c ON p.post_id = c.post_id
                     WHERE p.post_id = ${post_id}
                     GROUP BY p.title, p.post_id, author, p.content, last_update, avatar_path`;
 
         let result = await db.query(q);
 
         if(result[0].length > 0) {
-            let post = await getPosts(result);
+            let post = await tools.getPosts(result);
             post = post[0];
 
             let q =
@@ -56,10 +55,10 @@ class Post {
             result = await db.query(q);
             let comments = result[0];
 
-            comments.map(async comment => { 
-                comment.avatar_path = validateAvatar(comment.avatar_path);
-                comment.isLiked = await isCommentLiked(comment.comment_id);
-            });
+            for(let comment of comments) { 
+                comment.avatar_path = tools.validateAvatar(comment.avatar_path);
+                comment.isLiked = await tools.isCommentLiked(comment.comment_id);
+            };
 
             res.render('post', {
                 post_id: post.post_id,
@@ -94,7 +93,7 @@ class Post {
 
         let result = await db.query(q);
 
-        const posts = await getPosts(result);
+        const posts = await tools.getPosts(result);
 
         return res.json(posts);
     }
@@ -154,71 +153,37 @@ class Post {
             res.redirect('/');
         }
     }
-}
+    async likePost(req, res) {
+        try {
+            const post_id = req.params.post_id;
+            if(!post_id) return res.sendStatus(403);
 
-async function getPosts(result) {
-    let posts = [];
-    for(let i = 0; i < result[0].length; i++) {
-        const post_id = result[0][i].post_id;
-        const title = result[0][i].title;
-        const author = result[0][i].author;
-        const content = result[0][i].content;
-        const likes = result[0][i].likes;
-        const last_update = result[0][i].last_update;
-        const comments = result[0][i].comments;
+            const result = await db.query(`SELECT post_id FROM post_like
+            WHERE post_id = ${post_id} AND user_id = ${loggedIn}`);
 
-        let avatar_path = result[0][i].avatar_path;
+            if(result[0].length > 0) return res.sendStatus(403);
 
-        avatar_path = validateAvatar(avatar_path);
-
-        const liked = await isPostLiked(post_id);
-
-        const post = {
-            post_id,
-            title,
-            author,
-            avatar_path,
-            content,
-            likes,
-            comments,
-            last_update,
-            liked
-        };
-        posts.push(post);
+            await db.query(`INSERT INTO post_like (user_id, post_id) 
+                                        VALUES(${loggedIn}, ${post_id})`);
+            
+            res.sendStatus(200);
+        } catch(error) {
+            console.error(error);
+        }
     }
+    async dislikePost(req, res) {
+        try {
+            const post_id = req.params.post_id;
+            if(!post_id) throw new Error('post_id is not valid');
 
-    return posts;
-}
-
-function validateAvatar(avatar_path) {
-    if(avatar_path !== 'default.png') 
-        return '/users/' + avatar_path;
-
-    return '/' + avatar_path;
-}
-
-// лайкнут ли комментарий пользователем
-async function isCommentLiked(comment_id) {
-    if(!loggedIn) return 0;
-
-    q = `SELECT COUNT(comment_id) AS liked
-            FROM comment_like
-            WHERE comment_id = ${comment_id} AND user_id = ${loggedIn}`;
-    const liked = await db.query(q);
-
-    return liked[0][0].liked;
-}
-
-// лайкнут ли пост пользователем
-async function isPostLiked(post_id) {
-    if(!loggedIn) return 0;
-
-    q = `SELECT COUNT(post_id) AS liked
-            FROM post_like
-            WHERE post_id = ${post_id} AND user_id = ${loggedIn}`;
-    const liked = await db.query(q);
-
-    return liked[0][0].liked;
+            await db.query(`DELETE FROM post_like 
+                            WHERE user_id = ${loggedIn} AND post_id = ${post_id}`);
+            
+            res.sendStatus(200);
+        } catch(error) {
+            console.error(error);
+        }
+    }
 }
 
 module.exports = new Post();

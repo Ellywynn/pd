@@ -11,5 +11,7 @@ router.get( '/edit/:post_id', authMiddleware.isLoggedIn, postController.editPost
 router.get( '/delete/:post_id', authMiddleware.isLoggedIn, postController.deletePost);
 router.post('/add', authMiddleware.isLoggedIn, postController.createPost);
 router.post('/edit/:post_id', authMiddleware.isLoggedIn, postController.editPost);
+router.post('/like/:post_id', authMiddleware.isLoggedIn, postController.likePost);
+router.post('/dislike/:post_id', authMiddleware.isLoggedIn, postController.dislikePost);
 
 module.exports = router;

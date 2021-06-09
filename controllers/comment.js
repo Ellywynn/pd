@@ -23,6 +23,15 @@ class Comment {
         try {
             const comment_id = req.params.comment_id;
             const user_id = loggedIn;
+
+            if(!comment_id) return res.sendStatus(403);
+
+            let result = await db.query(`SELECT comment_id FROM comment_like WHERE
+                                         comment_id = ${comment_id} AND user_id = ${loggedIn}`);
+            
+            // если пост уже лайкнут, ничего не делать
+            if(result[0].length > 0) return res.sendStatus(403);
+
             await db.query(`INSERT INTO comment_like(user_id, comment_id)
                 VALUES(${user_id}, ${comment_id})`);
             return res.sendStatus(200);
@@ -34,9 +43,12 @@ class Comment {
         try {
             const comment_id = req.params.comment_id;
             const user_id = loggedIn;
+
+            if(!comment_id) return res.sendStatus(403);
+
             await db.query(`DELETE from comment_like
              WHERE user_id = ${user_id} AND comment_id = ${comment_id}`);
-            return res.sendStatus(200);
+            res.sendStatus(200);
         } catch (error) {
             console.error(error);
         }
@@ -44,8 +56,9 @@ class Comment {
     async deleteComment(req, res) {
         try {
             const comment_id = req.params.comment_id;
+            if(!comment_id) return res.sendStatus(403);
             await db.query(`DELETE FROM comment WHERE comment_id = ${comment_id}`);
-            return res.sendStatus(200);
+            res.sendStatus(200);
         } catch (error) {
             console.error(error);
         }

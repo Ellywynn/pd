@@ -148,10 +148,11 @@ class User {
                 
                 result = await db.query(q);
 
-                const likedCount = result[0][0].liked;
+                let likedCount = 0;
 
                 // если пользователь оценил какие-то посты, получить их
-                if(likedCount > 0) {
+                if(result[0].length > 0) {
+                    likedCount = result[0][0].liked;
                     let post_ids = [];
                     for(let i = 0; i < result[0].length; i++) {
                         post_ids.push(result[0][i].post_id);

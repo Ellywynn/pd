@@ -6,4 +6,4 @@ const authMiddleware = require('../middleware/auth');
 router.get('/:nickname', userController.getUser);
 router.post('/avatar', authMiddleware.isLoggedIn, userController.uploadImage);
 
-module.exports = router;
+module.exports = router; 

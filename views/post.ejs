@@ -23,16 +23,16 @@
         <%- content %>
       </div>
       <div class="likes-comments">
-        <button class="post-likes <% if(liked) { %> <%= 'liked' %> <% } %>"><i class="fa fa-heart"></i> <%= likes %></button>
+        <button data-id="<%= post_id %>"class="post-likes <% if(liked) { %> <%= 'liked' %> <% } %>"><i class="fa fa-heart"></i> <span class="like-count"><%= likes %></span></button>
         <p class="post-comments"><i class="fa fa-comment"></i> <%= commentCount %></p>
       </div>
     </div>
 
     <div class="comments">
       <% if(comments.length > 0) { %>
-        <p class="comments-info">Найдено <%= comments.length %> комментариев</p>
+        <p class="comments-info">Найдено <%= comments.length %> комментари<% if(comments.length % 10 === 1) { %><%= 'й' %><% } else if (comments.length % 10 >= 2 && comments.length % 10 <= 4) { %><%= 'я' %><% } else { %><%= 'ев' %><% } %></p>
         <% for(let i = 0; i < comments.length; i++) { %>
-          <div data-id="<%= comments[i].comment_id %>" class="comment">
+          <div class="comment">
             <div class="author-date">
               <a href="/user/<%= comments[i].author %>" class="comment-avatar">
                 <img src="<%= comments[i].avatar_path %>" alt="">
@@ -44,7 +44,7 @@
             </div>
             <p class="comment-content"><%= comments[i].content %></p>
             <div class="likes-comments">
-                <button data-id="<%= comments[i].comment_id %>" class="comment-likes <% if(comments[i].liked) { %> <%= 'liked' %> <% } %>"><i class="fa fa-heart"></i> <%= comments[i].likes %></button>
+                <button data-id="<%= comments[i].comment_id %>" class="comment-likes <% if(comments[i].isLiked) { %> <%= 'liked' %> <% } %>"><i class="fa fa-heart"></i> <span class="like-count"><%= comments[i].likes %></span></button>
             </div>
           </div>
         <% } %>
@@ -65,6 +65,8 @@
       <p class="comments-info">Войдите, чтобы оставить комментарий</p>
     <% } %>
 
-    <script src="/js/post.js"></script>
+    <% if(loggedIn) { %>
+      <script src="/js/post.js"></script>
+    <% } %>
 </body>
 </html>

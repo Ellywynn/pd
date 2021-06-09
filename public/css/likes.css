@@ -1,0 +1,17 @@
+button.post-likes.liked {
+    color: red;
+}
+
+button.post-likes:hover {
+    cursor: pointer;
+    color: red;
+}
+
+button.comment-likes:hover {
+    color: red;
+    cursor: pointer;
+}
+
+button.comment-likes.liked {
+    color: red;
+}

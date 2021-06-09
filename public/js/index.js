@@ -35,7 +35,7 @@ function appendLoadedPosts(posts) {
         '</div>' +
         '<a class="post-title" href="/post/{{post_id}}">{{title}}</a>' +
         '<div class="likes-comments"><p class="post-likes">' +
-        '<i class="fa fa-heart"></i>{{likes}}</p>' +
+        '<i class="fa fa-heart"></i> <span class="like-count">{{likes}}</span></p>' +
         '<p class="post-comments"><i class="fa fa-comment"></i>{{comments}}</p></div></div>';
     $posts.append(Mustache.render(postTemplate, post));
     });

@@ -18,9 +18,13 @@
 
   <link rel="stylesheet" href="/css/style.css">
 
+  <% if(loggedIn) { %>
+    <link rel="stylesheet" href="/css/likes.css">
+  <% } %>
+
   <% if(locals.title) { %>
     <title> <%= title %> </title>
   <% } else { %>
-    <title>ZXC</title>
+    <title>PolyView</title>
   <% } %>
 </head>

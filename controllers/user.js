@@ -2,6 +2,7 @@ const db = require('../config/database');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const sharp = require('sharp');
+const tools = require('../tools/tools');
 
 // round count for generating salt
 const roundCount = 11;
@@ -163,35 +164,29 @@ class User {
                         `SELECT p.post_id, p.title, u.nickname AS author, p.content,
                         DATE_FORMAT(p.last_update, '%d-%m-%Y в %H:%i:%s') AS last_update,
                         u.avatar_path AS avatar_path,
-                        COUNT(l.post_id) AS likes,
-                        COUNT(c.user_id) AS comments
+                        COUNT(l.post_id) AS likes
                         FROM post AS p 
                         LEFT JOIN user AS u ON p.user_id = u.user_id
                         LEFT JOIN post_like AS l ON p.post_id = l.post_id
-                        LEFT JOIN comment AS c ON p.post_id = c.post_id
                         WHERE p.post_id IN (${post_ids.join()})
                         GROUP BY p.title, p.post_id, author, p.content, last_update, avatar_path`);
 
-                    liked = result[0];
-                    liked.map(post => post.avatar_path = validateAvatar(post.avatar_path));
+                    liked = await tools.getPosts(result);
                 }
 
                 // посты, сделанные пользователем
                 q = ` SELECT p.post_id, p.title, u.nickname AS author,
                             DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
                             u.avatar_path AS avatar_path,
-                            COUNT(l.post_id) AS likes, COUNT(c.post_id) AS comments
+                            COUNT(l.post_id) AS likes
                             FROM post AS p
                             INNER JOIN user AS u ON p.user_id = u.user_id
                             LEFT JOIN post_like AS l ON l.post_id = p.post_id
-                            LEFT JOIN comment AS c ON c.post_id = p.post_id
                             WHERE p.user_id = ${user_id}
                             GROUP BY p.post_id, p.title, author, last_update, avatar_path`;
                 result = await db.query(q);
 
-                posts = result[0];
-
-                posts.map(post => post.avatar_path = validateAvatar(post.avatar_path));
+                posts = await tools.getPosts(result);
 
                 const postCount = posts.length;
 

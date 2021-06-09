@@ -2,7 +2,6 @@
 node_modules
 
 # DEV
-pd.drawio
-app structure.txt
+.env
 
 public/users

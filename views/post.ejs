@@ -16,6 +16,17 @@
               <p class="post-time"><%= last_update %></p>
           </div>
       </div>
+      <% if(loggedIn && (nickname == author || role == 'owner'
+       || role == 'admin' || role == 'moderator')) { %>
+        <div class="actions">
+          <form action="/post/edit/<%= post_id %>" class="action" method="POST">
+            <input id="change-post" type="submit" value="Изменить">
+          </form> 
+          <form action="/post/delete/<%= post_id %>" class="action" method="POST">
+            <input id="delete-post" type="submit" value="Удалить">
+          </form>
+        </div>
+      <% } %>
       <div class="post-title">
         <p class="post-title"><%= title %></p>
       </div>

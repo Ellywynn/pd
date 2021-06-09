@@ -34,4 +34,11 @@ $(document).ready(() => {
             error: () => {return;}
         });
     });
+
+    $('#delete-post').on('click', function(event) {
+        const agree = confirm('Вы уверены, что хотите удалить пост?');
+        if(!agree) {
+            event.preventDefault();
+        }
+    });
 });

@@ -134,23 +134,27 @@ class Post {
         }
     }
     async deletePost(req, res) {
-        const post_id = req.params.post_id;
-        const result = await db.query(`SELECT user_id FROM post WHERE post_id=${post_id}`);
-        if(result[0].length > 0) {
-            // если это чужой пост и при этом нет прав
-            if(result[0][0].user_id !== req.session.userId
-                && (req.session.role !== 'owner' || req.session.role !== 'admin'
-                || req.session.role !== 'moderator')) {
-                return res.render('notfound', {
-                    message: 'У вас нет прав на это действие'
-                });
+        try {
+            const post_id = req.params.post_id;
+            const result = await db.query(`SELECT user_id FROM post WHERE post_id=${post_id}`);
+            if(result[0].length > 0) {
+                // если это чужой пост и при этом нет прав
+                if(result[0][0].user_id !== req.session.userId
+                    && (req.session.role !== 'owner' || req.session.role !== 'admin'
+                    || req.session.role !== 'moderator')) {
+                    return res.render('notfound', {
+                        message: 'У вас нет прав на это действие'
+                    });
+                } else {
+                    await db.query(`DELETE FROM post WHERE post_id=${post_id}`);
+                    res.redirect(`/user/${nickname}`);
+                }
             } else {
-                await db.query(`DELETE FROM post WHERE post_id=${post_id}`);
-                res.redirect(`/user/${nickname}`);
+                // нет поста с таким id
+                res.redirect('/');
             }
-        } else {
-            // there is no post with this id
-            res.redirect('/');
+        } catch(error) {
+            console.error(error);
         }
     }
     async likePost(req, res) {

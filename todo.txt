@@ -1,5 +1,0 @@
-- register validation
-- likes, dislikes
-- mobile interface
-- edit post buttons
-- table insertions : $2b$11$4YRUP5r.0Z44P9VcuC2pLeYjl2iBTVqCWjAzsWneIdY4vur.UisoC

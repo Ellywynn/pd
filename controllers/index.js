@@ -18,7 +18,6 @@ class IndexController {
 
             const result = await db.query(q);
 
-            // если посты есть
             const posts = await getPosts(result);
             
             res.render('index', {

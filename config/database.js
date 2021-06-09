@@ -3,7 +3,7 @@ require('dotenv').config();
 const mysql = require("mysql2");
 
 // асинхронное подключение к базе данных
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     user: process.env.DB_USER,

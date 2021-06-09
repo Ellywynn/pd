@@ -79,8 +79,3 @@ INSERT INTO role (role) VALUES('owner');
 INSERT INTO role (role) VALUES('admin');
 INSERT INTO role (role) VALUES('default');
 INSERT INTO role (role) VALUES('moderator');
-
-INSERT INTO 
-user(email, password, avatar_path, nickname, role)
-VALUES('zxcteam@gmail.com', '$2b$11$4YRUP5r.0Z44P9VcuC2pLeYjl2iBTVqCWjAzsWneIdY4vur.UisoC',
-        'ellywynn.jpeg', 'ellywynn', 1);

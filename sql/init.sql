@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     password VARCHAR(255) NOT NULL,
     avatar_path VARCHAR(100) NOT NULL DEFAULT 'default.png',
     nickname VARCHAR(40) NOT NULL,
-    role TINYINT(1) NOT NULL DEFAULT 3,
+    role TINYINT(1) NOT NULL DEFAULT 25, -- default role
     registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY(user_id),

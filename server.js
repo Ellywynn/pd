@@ -63,7 +63,6 @@ start();
 // функция подключается к базе данных и запускает сервер
 async function start() {
     try {
-        await db.connect();
         console.log(`Successfully connected to the database '${process.env.DB_NAME}'`);
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
     } catch(error) {

@@ -140,7 +140,7 @@ class User {
                 avatar_path = validateAvatar(avatar_path);
 
                 // id понравившихся постов
-                let q = `SELECT COUNT(post_id) AS liked, post_id
+                let q = `SELECT post_id
                          FROM post_like
                          WHERE user_id = ${user_id}
                          GROUP BY post_id`;
@@ -149,11 +149,10 @@ class User {
                 
                 result = await db.query(q);
 
-                let likedCount = 0;
+                const likedCount = result[0].length;
 
                 // если пользователь оценил какие-то посты, получить их
                 if(result[0].length > 0) {
-                    likedCount = result[0][0].liked;
                     let post_ids = [];
                     for(let i = 0; i < result[0].length; i++) {
                         post_ids.push(result[0][i].post_id);
@@ -173,7 +172,7 @@ class User {
 
                     liked = await tools.getPosts(result);
                 }
-
+ 
                 // посты, сделанные пользователем
                 q = ` SELECT p.post_id, p.title, u.nickname AS author,
                             DATE_FORMAT(p.last_update, '%d %M %Y at %H:%i:%s') AS last_update,
@@ -190,12 +189,18 @@ class User {
 
                 const postCount = posts.length;
 
+                result = await db.query(`SELECT COUNT(comment_id) AS count
+                                         FROM comment WHERE user_id = ${user_id}`);
+
+                const commentCount = result[0][0].count;
+
                 res.render('user', {
                     posts,
                     user,
                     liked,
                     regTime,
                     likedCount,
+                    commentCount,
                     postCount,
                     avatar_path
                 });

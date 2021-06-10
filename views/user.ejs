@@ -16,7 +16,7 @@
             <p class="reg-time">Дата регистрации: <%= regTime %></p>
             <p class="post-count">Количество сделанных постов: <%= postCount %></p>
             <p class="liked-count">Количество понравившихся постов: <%= likedCount %></p>
-            <p class="comment-count">Количество оставленных комментариев: <%= likedCount %></p>
+            <p class="comment-count">Количество оставленных комментариев: <%= commentCount %></p>
             <% if(nickname == user) { %>
                 <form class="change-avatar" action="/user/avatar" method="post" encType="multipart/form-data">
                     <label for="avatar">Изменить аватар:</label>

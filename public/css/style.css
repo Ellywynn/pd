@@ -445,7 +445,6 @@ body.single-post {
 
 .post.single {
     border: none;
-    border-radius: 0;
     height: auto;
     margin-bottom: 30px;
 }
@@ -785,6 +784,9 @@ body.single-post {
 @media only screen and (max-width: 600px) {
     .page-title{
         font-size: 25px;
+    }
+    .post.single {
+        border-radius: 0;
     }
     .post-title {
         font-size: 26px;

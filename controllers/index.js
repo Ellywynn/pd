@@ -16,7 +16,7 @@ class IndexController {
             GROUP BY p.post_id, p.title, author, p.content, last_update
             ORDER BY last_update DESC`;
 
-            const result = await db.query(q);
+            let result = await db.query(q);
 
             const posts = await getPosts(result);
             

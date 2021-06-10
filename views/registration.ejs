@@ -18,14 +18,12 @@
     </div>
 
     <form class="register-form" action="/auth/register" method="post">
-        <label for="nickname">Username:<span class="required-field">*</span></label>
+        <label for="nickname">Username:</label>
         <input type="text" name="nickname" id="username" required value=<%= nickname %>>
-        <label for="email">Email:<span class="required-field">*</span></label>
+        <label for="email">Email:</label>
         <input type="email" name="email" id="email" required value=<%= email %>> 
-        <label for="password">Пароль:<span class="required-field">*</span></label>
+        <label for="password">Пароль:</label>
         <input type="password" name="password" id="pass1" required value=<%= password %>> 
-
-        <p class="required-field">* - обязательное поле</p>
 
         <button id="submit" type="submit">Зарегистрироваться</button>
     </form>

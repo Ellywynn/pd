@@ -44,6 +44,10 @@
         <p class="comments-info">Найдено <%= comments.length %> комментари<% if(comments.length % 10 === 1) { %><%= 'й' %><% } else if (comments.length % 10 >= 2 && comments.length % 10 <= 4) { %><%= 'я' %><% } else { %><%= 'ев' %><% } %></p>
         <% for(let i = 0; i < comments.length; i++) { %>
           <div class="comment">
+            <% if(loggedIn && (nickname == author || role == 'owner'
+                  || role == 'admin' || role == 'moderator')) { %>
+              <button data-id="<%= comments[i].comment_id %>"" title="Удалить" class="delete-comment"><i class="fa fa-times"></i></button>
+            <% } %>
             <div class="author-date">
               <a href="/user/<%= comments[i].author %>" class="comment-avatar">
                 <img src="<%= comments[i].avatar_path %>" alt="">

@@ -57,6 +57,7 @@ class Comment {
         try {
             const comment_id = req.params.comment_id;
             if(!comment_id) return res.sendStatus(403);
+            await db.query(`DELETE FROM comment_like WHERE comment_id = ${comment_id}`);
             await db.query(`DELETE FROM comment WHERE comment_id = ${comment_id}`);
             res.sendStatus(200);
         } catch (error) {

@@ -488,6 +488,7 @@ body.single-post {
     background-color: #fff;
     padding: 10px;
     border-radius: 10px;
+    position: relative;
 }
 
 .comment-avatar {
@@ -564,6 +565,21 @@ body.single-post {
     width: 100px;
     height: 25px;
     font-size: 14px;
+}
+
+.comment button.delete-comment {
+    font-size: 20px;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
+.comment button.delete-comment:hover {
+    color: red;
+    cursor: pointer;
 }
 
 #search-bar {

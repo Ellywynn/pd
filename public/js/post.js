@@ -41,4 +41,16 @@ $(document).ready(() => {
             event.preventDefault();
         }
     });
+
+    $('.comment').on('click', 'button.delete-comment', function(event) {
+        const $comment = $(this).closest('.comment');
+        $.ajax({
+            type: 'DELETE',
+            url: '/comment/' + $(this).attr('data-id'),
+            success: () => {
+                $comment.remove();
+            },
+            error: () => {return;}
+        });
+    });
 });

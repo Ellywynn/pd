@@ -128,7 +128,7 @@ class User {
         try {
             const nickname = req.params.nickname;
             let result = await db.query(`SELECT nickname, user_id AS id,
-             DATE_FORMAT(registered_at, '%Y-%m-%i') AS regtime, avatar_path
+             DATE_FORMAT(registered_at, '%Y-%m-%d') AS regtime, avatar_path
              FROM user WHERE nickname='${nickname}'`);
             // если пользователь с таким ником найден
             if(result[0].length > 0) {

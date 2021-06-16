@@ -5,7 +5,7 @@ class Post {
     async createPost(req, res) {
         try {
             const content = req.body.editordata;
-            if(content.includes('<script') || content.includes('<head')) {
+            if(content.includes('<script') || content.includes('<style')) {
                 return res.render('notfound', {
                     message: 'just go and fuck yourself, alright? :)'
                 });
@@ -107,7 +107,7 @@ class Post {
 
         const content = req.body.editordata;
 
-        if(content.includes('<script') || content.includes('<head')) {
+        if(content.includes('<script') || content.includes('<style')) {
             return res.render('notfound', {
                 message: 'just go and fuck yourself, alright? :)'
             });

@@ -4,8 +4,13 @@ const tools = require('../tools/tools');
 class Post {
     async createPost(req, res) {
         try {
-            const title = req.body.title;
             const content = req.body.editordata;
+            if(content.includes('<script') || content.includes('<head')) {
+                return res.render('notfound', {
+                    message: 'just go and fuck yourself, alright? :)'
+                });
+            }
+            const title = req.body.title;
             const userId = loggedIn;
             const q = `INSERT INTO post(title, user_id, content)
                     VALUES('${title}', ${userId}, '${content}')`;
@@ -99,9 +104,18 @@ class Post {
     }
     async editPost(req, res) {
         const post_id = req.params.post_id;
+
+        const content = req.body.editordata;
+
+        if(content.includes('<script') || content.includes('<head')) {
+            return res.render('notfound', {
+                message: 'just go and fuck yourself, alright? :)'
+            });
+        }
+
         await db.query(`UPDATE post
                         SET title = '${req.body.title}',
-                            content = '${req.body.editordata}'
+                            content = '${content}'
                         WHERE post_id = ${post_id}`);
         res.redirect(`/post/${post_id}`);
     }

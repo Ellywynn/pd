@@ -7,7 +7,7 @@
   <%- include('layouts/navbar'); -%>
   
   <form class="summernote-form" method="post" action="
-    <% if(locals.postContent && locals.postTitle && locals.post_id) { %>
+    <% if(locals.postContent || locals.postTitle || locals.post_id) { %>
       /post/edit/<%= post_id %>
     <% } else { %>
       /post/add

@@ -113,8 +113,8 @@ class Post {
         if(result[0].length > 0) {
             // если это чужой пост или нет прав
             if(result[0][0].user_id !== req.session.userId
-                && (req.session.role !== 'owner' || req.session.role !== 'admin'
-                || req.session.role !== 'moderator')) {
+                && !(req.session.role === 'owner' || req.session.role === 'admin'
+                || req.session.role === 'moderator')) {
                 return res.render('notfound', {
                     message: 'У вас нет прав на это действие'
                 });
@@ -140,8 +140,8 @@ class Post {
             if(result[0].length > 0) {
                 // если это чужой пост и при этом нет прав
                 if(result[0][0].user_id !== req.session.userId
-                    && (req.session.role !== 'owner' || req.session.role !== 'admin'
-                    || req.session.role !== 'moderator')) {
+                    && !(req.session.role === 'owner' || req.session.role === 'admin'
+                    || req.session.role === 'moderator')) {
                     return res.render('notfound', {
                         message: 'У вас нет прав на это действие'
                     });

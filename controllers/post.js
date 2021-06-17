@@ -133,18 +133,19 @@ class Post {
                     message: 'У вас нет прав на это действие'
                 });
             } else {
-                const postTitle = result[0][0].title;
-                const postContent = result[0][0].content;
+                const title = result[0][0].title;
+                const content = result[0][0].content;
                 res.render('edit_post', {
                     createPost: true,
-                    postTitle,
-                    postContent,
+                    title,
+                    content,
                     post_id
                 });
             }
         } else {
-            // there is no post with this id
-            res.redirect('/');
+            res.render('notfound', {
+                message: 'Пост не найден'
+            });
         }
     }
     async deletePost(req, res) {

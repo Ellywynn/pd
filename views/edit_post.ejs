@@ -7,7 +7,7 @@
   <%- include('layouts/navbar'); -%>
   
   <form class="summernote-form" method="post" action="
-    <% if(locals.postContent || locals.postTitle || locals.post_id) { %>
+    <% if(locals.content || locals.title || locals.post_id) { %>
       /post/edit/<%= post_id %>
     <% } else { %>
       /post/add
@@ -16,11 +16,11 @@
     <input class="new-post-title" type="text" name="title"
       placeholder="Заголовок..."
       required
-      value=<% if(locals.postTitle) { %>
-        <%= postTitle %>
-      <% } %>>
+      value=<% if(locals.title) { %>
+        <%= title %>
+      <% } else { %> <%= "" %> <% } %>>
     <textarea class="new-post-content"
-        id="summernote" name="editordata"><% if(locals.postContent) { %><%- postContent %><% } %></textarea>
+        id="summernote" name="editordata"><% if(locals.content) { %><%- content %><% } %></textarea>
     <button class="create-post" type="submit">Сохранить</button>
   </form>
 

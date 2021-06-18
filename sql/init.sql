@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     avatar_path VARCHAR(100) NOT NULL DEFAULT 'default.png',
     nickname VARCHAR(40) NOT NULL,
     role TINYINT(1) NOT NULL DEFAULT 25, -- default role
-    registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    registered_at TIMESTAMP NOT NULL DEFAULT now(),
 
     PRIMARY KEY(user_id),
 
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `post` (
     title VARCHAR(150) NOT NULL,
     user_id INT NOT NULL,
     content TEXT NOT NULL, -- post content (stored like innerHTML)
-    last_update DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_update TIMESTAMP NOT NULL DEFAULT now(),
 
     PRIMARY KEY(post_id),
 

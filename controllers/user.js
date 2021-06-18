@@ -215,13 +215,12 @@ class User {
     }
 
     async uploadImage(req, res, next) {
-        const avatar = req.files.avatar;
-
-        if(!avatar) {
+        if(!req.files) {
             return res.render('notfound', {
                 message: 'Ошибка загрузки файла'
             });
         }
+        const avatar = req.files.avatar;
 
         // если файл неправильного формата
         if(avatar.mimetype !== 'image/png' && avatar.mimetype !== 'image/jpeg') {
